@@ -55,13 +55,20 @@ d:\Agent\Tools\Playwright/
 │   ├── routes.py                 # FastAPI 路由定義 (/health, /api/v1/tasks)
 │   └── schemas.py                # 請求與響應 Pydantic 資料結構定義
 │
+├── web/                          # 🖥️ Web 控制台前端介面
+│   ├── index.html                # 單頁儀表板 (SPA)
+│   └── static/                   # 靜態資源目錄
+│       ├── css/style.css         # 現代深色玻璃擬態樣式表
+│       └── js/app.js             # WebSocket 即時串流與任務表單互動
+│
 ├── tests/                        # 🧪 自動化測試套件 (持續整合品質保證)
 │   ├── __init__.py
 │   ├── test_health.py            # 健康探針端點測試
 │   ├── test_security.py          # API Key 鑑權防護測試
 │   ├── test_task_registry.py     # 插件註冊、動態探索與開關測試
 │   ├── test_browser_lifecycle.py # 瀏覽器沙盒隔離與錯誤保護測試
-│   └── test_op_logger.py         # 操作審計日誌與 30 天過期清理測試
+│   ├── test_op_logger.py         # 操作審計日誌與 30 天過期清理測試
+│   └── test_web_ui.py            # Web 控制台與 WebSocket 串流測試
 │
 ├── logs/                         # 📝 系統與模組日誌集中目錄
 │   ├── operations/               # 🎯 專案操作總紀錄
@@ -97,11 +104,13 @@ uv run playwright install chromium
 Copy-Item .env.example .env
 ```
 
-### 4. 啟動常駐服務 (Daemon Mode)
+### 4. 啟動常駐服務與 Web 控制台 (Daemon Mode)
 ```powershell
 uv run python main.py
 ```
-服務將啟動並監聽於 `http://127.0.0.1:8000`，內建 Swagger UI 可於瀏覽器開啟：`http://127.0.0.1:8000/docs`。
+服務將啟動並監聽於 `http://127.0.0.1:8000`：
+- **🖥️ Web 控制台儀表板**：開啟瀏覽器訪問 `http://127.0.0.1:8000/`，即可直接可視化監控系統狀態、動態填表執行任務、並透過 WebSocket 即時串流查閱操作審計日誌。
+- **📖 Swagger API 文件**：可於瀏覽器開啟 `http://127.0.0.1:8000/docs` 進行標準 REST API 調試。
 
 ### 5. CLI 單次執行模式 (免開 API 服務直接除錯)
 可在命令列直接執行任意註冊的任務並印出 JSON 結果（執行結果會自動記錄於 `logs/operations/`）：

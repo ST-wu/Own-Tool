@@ -49,6 +49,7 @@ async def lifespan(app: FastAPI):
     # 優雅停機流程 (Graceful Shutdown)
     logger.info("=== 正在停止 Playwright 常駐服務 ===")
     op_logger.log(action="SYSTEM:SHUTDOWN", status="INFO", details={"event": "graceful_shutdown"})
+    op_logger.shutdown()
     await scheduler.stop()
     await browser_manager.stop()
     logger.info("Playwright 常駐服務已安全關閉")
@@ -63,6 +64,14 @@ app = FastAPI(
 
 # 掛載 API 路由
 app.include_router(router)
+
+# 掛載靜態資源與產出物預覽
+from pathlib import Path
+from fastapi.staticfiles import StaticFiles
+Path("web/static").mkdir(parents=True, exist_ok=True)
+Path("artifacts").mkdir(parents=True, exist_ok=True)
+app.mount("/static", StaticFiles(directory="web/static"), name="static")
+app.mount("/artifacts", StaticFiles(directory="artifacts"), name="artifacts")
 
 
 async def run_cli_task(task_name: str, raw_params_json: str | None = None) -> None:
@@ -111,6 +120,7 @@ def main():
         host=settings.HOST,
         port=settings.PORT,
         reload=False,
+        timeout_graceful_shutdown=1,
     )
 
 

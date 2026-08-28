@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Playwright Automation Daemon | 控制台</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body class="dark-theme">
+  <!-- 背景流光特效層 -->
+  <div class="glow-bg-mesh"></div>
+
+  <div class="app-container">
+    <!-- 頂部導航列 -->
+    <header class="app-header">
+      <div class="brand">
+        <div class="brand-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polygon points="5 3 19 12 5 21 5 3"></polygon>
+          </svg>
+        </div>
+        <div class="brand-info">
+          <h1 class="brand-title">Playwright Daemon</h1>
+          <span class="brand-subtitle">高擴充常駐自動化控制台</span>
+        </div>
+      </div>
+
+      <div class="header-status-group">
+        <div id="service-status-badge" class="status-badge status-loading">
+          <span class="pulse-dot"></span>
+          <span id="service-status-text">連線中...</span>
+        </div>
+        <div class="latency-badge" id="latency-badge">-- ms</div>
+      </div>
+
+      <div class="header-actions">
+        <div class="api-key-input-wrapper">
+          <svg class="key-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"></path>
+          </svg>
+          <input type="password" id="api-key-input" placeholder="X-API-Key 鑑權金鑰" spellcheck="false">
+          <button id="toggle-key-visibility" class="icon-btn" title="切換密碼顯示">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+              <circle cx="12" cy="12" r="3"></circle>
+            </svg>
+          </button>
+        </div>
+        <button id="refresh-btn" class="btn btn-secondary" title="重新整理狀態">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"></path>
+          </svg>
+          重新整理
+        </button>
+        <a href="/docs" target="_blank" class="btn btn-outline" title="開啟 Swagger API 互動文檔">API 文件</a>
+      </div>
+    </header>
+
+    <!-- 統計核心指標卡片區 -->
+    <section class="metrics-grid">
+      <div class="metric-card">
+        <div class="metric-header">
+          <span class="metric-label">瀏覽器常駐引擎</span>
+          <span class="metric-icon cyan">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="2" y1="12" x2="22" y2="12"></line>
+              <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+            </svg>
+          </span>
+        </div>
+        <div class="metric-value" id="metric-browser-status">連線中</div>
+        <div class="metric-footer" id="metric-browser-sub">可用連線數: --</div>
+      </div>
+
+      <div class="metric-card">
+        <div class="metric-header">
+          <span class="metric-label">連線延遲</span>
+          <span class="metric-icon emerald">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+            </svg>
+          </span>
+        </div>
+        <div class="metric-value" id="metric-latency">-- ms</div>
+        <div class="metric-footer">瀏覽器即時響應時間</div>
+      </div>
+
+      <div class="metric-card">
+        <div class="metric-header">
+          <span class="metric-label">已掛載任務插件</span>
+          <span class="metric-icon violet">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="3" width="7" height="7"></rect>
+              <rect x="14" y="3" width="7" height="7"></rect>
+              <rect x="14" y="14" width="7" height="7"></rect>
+              <rect x="3" y="14" width="7" height="7"></rect>
+            </svg>
+          </span>
+        </div>
+        <div class="metric-value" id="metric-task-count">0</div>
+        <div class="metric-footer">目錄: tasks/builtin/</div>
+      </div>
+
+      <div class="metric-card">
+        <div class="metric-header">
+          <span class="metric-label">操作日誌審計狀態</span>
+          <span class="metric-icon amber">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+              <polyline points="14 2 14 8 20 8"></polyline>
+              <line x1="16" y1="13" x2="8" y2="13"></line>
+              <line x1="16" y1="17" x2="8" y2="17"></line>
+              <polyline points="10 9 9 9 8 9"></polyline>
+            </svg>
+          </span>
+        </div>
+        <div class="metric-value" id="metric-log-status">30天輪轉</div>
+        <div class="metric-footer" id="metric-log-sub">目錄: logs/operations/</div>
+      </div>
+    </section>
+
+    <!-- 主面板分區：任務控制中心 (左) + 即時日誌終端 (右) -->
+    <main class="dashboard-split">
+      <!-- 左側：任務插件中心 -->
+      <section class="panel task-panel">
+        <div class="panel-header">
+          <div class="panel-title-group">
+            <h2 class="panel-title">任務控制中心 (Task Hub)</h2>
+            <span class="panel-caption">自動發現並掛載之 Playwright 任務</span>
+          </div>
+          <button id="reload-tasks-btn" class="btn btn-sm btn-secondary" title="重新掃描任務">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"></path>
+            </svg>
+            掃描
+          </button>
+        </div>
+
+        <div id="tasks-container" class="tasks-grid">
+          <!-- 動態載入任務卡片或純淨引導卡 -->
+          <div class="tasks-loading">正在載入任務清單...</div>
+        </div>
+      </section>
+
+      <!-- 右側：操作審計即時日誌終端 -->
+      <section class="panel log-panel">
+        <div class="panel-header">
+          <div class="panel-title-group">
+            <div class="title-with-ws">
+              <h2 class="panel-title">操作審計即時日誌</h2>
+              <div id="ws-indicator" class="ws-badge ws-connecting" title="WebSocket 即時串流連線狀態">
+                <span class="pulse-dot-sm"></span>
+                <span id="ws-status-text">WS 連線中</span>
+              </div>
+            </div>
+            <span class="panel-caption">logs/operations/ 每日總紀錄串流</span>
+          </div>
+
+          <div class="log-controls">
+            <div class="filter-chips">
+              <button class="chip active" data-filter="ALL">全部</button>
+              <button class="chip" data-filter="INFO">資訊</button>
+              <button class="chip" data-filter="SUCCESS">成功</button>
+              <button class="chip" data-filter="WARNING">警告</button>
+              <button class="chip" data-filter="ERROR">異常</button>
+              <button class="chip" data-filter="DEBUG">除錯</button>
+            </div>
+            <button id="clear-logs-btn" class="btn btn-sm btn-ghost" title="清空當前視窗日誌">清空</button>
+            <button id="view-config-btn" class="btn btn-sm btn-secondary" title="查看 all_log_config.js">日誌設定</button>
+          </div>
+        </div>
+
+        <div class="terminal-wrapper">
+          <div id="terminal-body" class="terminal-body">
+            <div class="terminal-line system-line">[系統啟動] 即時日誌連線就緒，等待操作事件...</div>
+          </div>
+          <div class="terminal-footer">
+            <span id="log-count-text">顯示 1 筆紀錄</span>
+            <label class="autoscroll-toggle">
+              <input type="checkbox" id="autoscroll-chk" checked>
+              <span>自動向下捲動</span>
+            </label>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- 任務執行輸入表單 Modal -->
+  <div id="task-modal" class="modal-backdrop">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <div>
+          <h3 id="modal-task-name" class="modal-title">執行任務</h3>
+          <p id="modal-task-desc" class="modal-subtitle"></p>
+        </div>
+        <button id="close-modal-btn" class="icon-btn close-btn">&times;</button>
+      </div>
+
+      <div class="modal-body">
+        <form id="task-dynamic-form">
+          <div id="dynamic-form-fields"></div>
+        </form>
+
+        <div id="task-result-box" class="result-box hidden">
+          <div class="result-box-header">
+            <span id="result-status-badge" class="badge">執行結果</span>
+            <span id="result-time" class="text-muted"></span>
+          </div>
+          <pre id="result-json-output" class="json-code"></pre>
+          <div id="result-screenshot-wrapper" class="screenshot-wrapper hidden">
+            <h4>產出畫面快照</h4>
+            <img id="result-screenshot-img" src="" alt="任務截圖">
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button id="modal-cancel-btn" class="btn btn-ghost">關閉</button>
+        <button id="modal-submit-btn" class="btn btn-primary">
+          <span class="btn-spinner hidden"></span>
+          <span class="btn-text">立即執行任務</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- all_log_config.js 檢視 Modal -->
+  <div id="config-modal" class="modal-backdrop">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <div>
+          <h3 class="modal-title">操作日誌配置設定</h3>
+          <p class="modal-subtitle">路徑: logs/operations/all_log_config.js</p>
+        </div>
+        <button id="close-config-modal-btn" class="icon-btn close-btn">&times;</button>
+      </div>
+      <div class="modal-body">
+        <pre id="config-json-output" class="json-code js-code"></pre>
+      </div>
+      <div class="modal-footer">
+        <button id="config-modal-close-btn" class="btn btn-secondary">關閉</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="/static/js/app.js"></script>
+</body>
+</html>

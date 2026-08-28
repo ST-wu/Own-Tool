@@ -1,3 +1,4 @@
+import asyncio
 import os
 import re
 import json
@@ -23,6 +24,40 @@ class OperationLogger:
         self.config = self._load_config()
         self.operations_dir = settings.LOG_DIR / self.config.get("folder", "operations")
         self.operations_dir.mkdir(parents=True, exist_ok=True)
+        self._subscribers: set[asyncio.Queue] = set()
+
+    def subscribe(self) -> asyncio.Queue:
+        """註冊即時日誌廣播隊列 (供 WebSocket 使用)"""
+        q: asyncio.Queue = asyncio.Queue(maxsize=200)
+        self._subscribers.add(q)
+        return q
+
+    def unsubscribe(self, q: asyncio.Queue) -> None:
+        """取消註冊日誌隊列"""
+        self._subscribers.discard(q)
+
+    def shutdown(self) -> None:
+        """服務停機時廣播 None 哨兵訊號，促使所有活躍的 WebSocket 消費者立即優雅退出"""
+        for q in list(self._subscribers):
+            try:
+                q.put_nowait(None)
+            except Exception:
+                pass
+        self._subscribers.clear()
+
+    def get_recent_logs(self, limit: int = 60) -> list[str]:
+        """獲取當日最新的歷史操作日誌"""
+        prefix = self.config.get("file_prefix", "op")
+        date_str = datetime.now().strftime("%Y-%m-%d")
+        today_file = self.operations_dir / f"{prefix}_{date_str}.log"
+        if not today_file.exists():
+            return []
+        try:
+            with open(today_file, "r", encoding="utf-8") as f:
+                lines = f.readlines()
+                return [line.strip() for line in lines[-limit:] if line.strip()]
+        except Exception:
+            return []
 
     def _load_config(self) -> dict[str, Any]:
         """讀取 logs/all_log_config.js 設定，具備自動容錯與預設值退避 (Guard clause 優先)"""
@@ -127,7 +162,15 @@ class OperationLogger:
         except Exception as e:
             logger.error(f"[ERROR_SUMMARY] 操作日誌寫入失敗: {type(e).__name__}: {e}")
 
-        return log_line.strip()
+        # 廣播至所有活躍的 WebSocket 隊列
+        clean_entry = log_line.strip()
+        for q in list(self._subscribers):
+            try:
+                q.put_nowait(clean_entry)
+            except Exception:
+                pass
+
+        return clean_entry
 
     def clean_expired_logs(self, max_days: int | None = None) -> list[Path]:
         """
