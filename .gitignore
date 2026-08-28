@@ -1,0 +1,29 @@
+# Python-generated files
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+
+# Virtual environments
+.venv
+
+# Secrets & Environment Configurations
+.env
+*.env
+!.env.example
+
+# Runtime Logs & Generated Artifacts
+logs/
+artifacts/
+
+# Testing & Cache
+.pytest_cache/
+
+# Agent Session Backups
+.agents/backups/
+
+# Operating System Files
+.DS_Store
+Thumbs.db
