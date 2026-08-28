@@ -39,17 +39,16 @@ d:\Agent\Tools\Playwright/
 │   ├── __init__.py
 │   ├── browser.py                # 瀏覽器生命週期、Context 池、並發信號控制與自癒機制
 │   ├── security.py               # 安全性鑑權依賴 (X-API-Key Guard Clauses)
-│   ├── scheduler.py              # 背景週期性排程調度器 (定時巡檢與心跳)
-│   └── logger.py                 # Loguru 結構化日誌輸出與每天/大小檔案輪轉配置
+│   ├── scheduler.py              # 背景週期性排程調度器 (定時巡檢與日誌清理)
+│   ├── op_logger.py              # 操作審計日誌器 (負責 logs/operations/ 每日分檔與過期清理)
+│   └── logger.py                 # Loguru 系統日誌輸出配置
 │
 ├── tasks/                        # 🧩 可擴充任務插件目錄 (未來擴充/修改/刪減功能的集中地)
 │   ├── __init__.py
 │   ├── base.py                   # BaseTask 抽象基類 (定義 run, 參數模型與執行生命週期)
 │   ├── registry.py               # TaskRegistry 註冊中心 (自動掃描、狀態開關與 Schema 自省)
-│   └── builtin/                  # 內建任務實作範本
-│       ├── __init__.py
-│       ├── health_probe.py       # 系統健康探針任務 (執行 JS 運算檢測引擎健康度)
-│       └── web_inspector.py      # 通用網頁巡檢任務 (導航、檢查狀態碼、標題、選擇性截圖)
+│   └── builtin/                  # 內建任務插件目錄 (純淨基底，等待依需求逐步添加任務)
+│       └── __init__.py
 │
 ├── api/                          # 🌐 HTTP REST API 服務介面
 │   ├── __init__.py
@@ -61,9 +60,14 @@ d:\Agent\Tools\Playwright/
 │   ├── test_health.py            # 健康探針端點測試
 │   ├── test_security.py          # API Key 鑑權防護測試
 │   ├── test_task_registry.py     # 插件註冊、動態探索與開關測試
-│   └── test_browser_lifecycle.py # 瀏覽器沙盒隔離與錯誤保護測試
+│   ├── test_browser_lifecycle.py # 瀏覽器沙盒隔離與錯誤保護測試
+│   └── test_op_logger.py         # 操作審計日誌與 30 天過期清理測試
 │
-├── logs/                         # 📝 系統運行日誌 (自動建立，每天輪轉與壓縮)
+├── logs/                         # 📝 系統與模組日誌集中目錄
+│   ├── all_log_config.js         # [日誌設定] 定義保留天數 (30天)、單日筆數上限、子目錄政策
+│   ├── operations/               # 🎯 專案操作總紀錄 (每日一檔: op_YYYY-MM-DD.log)
+│   └── (未來其它工具專屬日誌子目錄，如 logs/tool_a/ ...)
+│
 └── artifacts/                    # 📦 產出物保存目錄 (自動建立)
     ├── failures/                 # 任務異常時自動儲存之畫面快照
     └── screenshots/              # 業務任務指定保存之網頁截圖
@@ -99,13 +103,10 @@ uv run python main.py
 服務將啟動並監聽於 `http://127.0.0.1:8000`，內建 Swagger UI 可於瀏覽器開啟：`http://127.0.0.1:8000/docs`。
 
 ### 5. CLI 單次執行模式 (免開 API 服務直接除錯)
-可在命令列直接執行任意任務並印出 JSON 結果：
+可在命令列直接執行任意註冊的任務並印出 JSON 結果（執行結果會自動記錄於 `logs/operations/`）：
 ```powershell
-# 執行系統探針
-uv run python main.py run-task system_health_probe
-
-# 執行網頁巡檢任務帶參數
-uv run python main.py run-task web_inspector '{\"url\": \"https://example.com\", \"take_screenshot\": true}'
+# 執行自訂任務 (以 my_custom_task 為例)
+uv run python main.py run-task my_custom_task '{\"target_url\": \"https://example.com\"}'
 ```
 
 ### 6. 執行自動化測試
@@ -212,8 +213,34 @@ curl -X POST \
 
 ---
 
-## 🛡️ 常駐運維與故障排查
+## 📝 專案日誌體系與 all_log_config.js 規範
 
-1. **日誌查閱**：所有日誌即時輸出於終端機，並寫入 `logs/app.log`。日誌支援每天與滿 10MB 自動輪轉壓縮，保留 14 天。
-2. **失敗快照查閱**：當任何自動化腳本發生未處理例外時，系統會自動將崩潰時的畫面拍攝並存放在 `artifacts/failures/fail_<task_name>_<timestamp>.png`。
-3. **記憶體控制**：可透過 `.env` 中的 `MAX_CONCURRENT_CONTEXTS` 控制最大同時執行的瀏覽器標籤頁數，預設為 5，避免主機記憶體耗盡。
+為了確保日誌容易歸納與長期維護，系統採用分流目錄與定期清理機制：
+
+### 1. 專屬操作總紀錄 (`logs/operations/`)
+- 檔名規則：`op_YYYY-MM-DD.log`（每日一個檔案）。
+- 紀錄層級：精簡包含時間、動作類型、執行結果 (SUCCESS/ERROR/DEBUG) 與耗時。
+- 機敏防護：自動遮蔽密碼、Token、金鑰等敏感字串。
+
+### 2. 未來工具獨立子目錄規範
+後續若有新工具或模組需要日誌記錄，均應在 `logs/` 下建立專屬子目錄，例如：
+- `logs/scraper_tool/`
+- `logs/monitor_job/`
+
+### 3. 日誌設定檔 `logs/all_log_config.js`
+所有日誌的保存與清理政策均在此檔集中管理：
+```javascript
+module.exports = {
+  operations: {
+    enabled: true,
+    folder: "operations",
+    retention_days: 30,         // 最多保留 30 天 (1個月)，超期自動刪除
+    max_records_per_day: 10000, // 單日筆數上限保護
+    max_file_size_mb: 10,       // 單檔大小上限
+    log_level: "INFO",
+    mask_sensitive_keys: true
+  }
+};
+```
+常駐服務啟動時及每日排程將自動執行 `clean_expired_logs()`，自動掃除超過 `retention_days` 的歷史檔案。
+

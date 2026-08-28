@@ -15,7 +15,9 @@ wheels/
 !.env.example
 
 # Runtime Logs & Generated Artifacts
-logs/
+logs/*
+!logs/all_log_config.js
+*.log
 artifacts/
 
 # Testing & Cache
