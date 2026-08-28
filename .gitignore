@@ -16,7 +16,8 @@ wheels/
 
 # Runtime Logs & Generated Artifacts
 logs/*
-!logs/all_log_config.js
+!logs/operations/
+!logs/operations/all_log_config.js
 *.log
 artifacts/
 

@@ -19,7 +19,7 @@ class OperationLogger:
     """
 
     def __init__(self, config_path: Path | None = None) -> None:
-        self.config_path = config_path or (settings.LOG_DIR / "all_log_config.js")
+        self.config_path = config_path or (settings.LOG_DIR / "operations" / "all_log_config.js")
         self.config = self._load_config()
         self.operations_dir = settings.LOG_DIR / self.config.get("folder", "operations")
         self.operations_dir.mkdir(parents=True, exist_ok=True)

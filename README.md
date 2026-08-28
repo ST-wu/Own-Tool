@@ -64,8 +64,9 @@ d:\Agent\Tools\Playwright/
 │   └── test_op_logger.py         # 操作審計日誌與 30 天過期清理測試
 │
 ├── logs/                         # 📝 系統與模組日誌集中目錄
-│   ├── all_log_config.js         # [日誌設定] 定義保留天數 (30天)、單日筆數上限、子目錄政策
-│   ├── operations/               # 🎯 專案操作總紀錄 (每日一檔: op_YYYY-MM-DD.log)
+│   ├── operations/               # 🎯 專案操作總紀錄
+│   │   ├── all_log_config.js     # [操作日誌設定] 定義本組 logs 保留天數 (30天)、筆數上限、遮罩等
+│   │   └── op_YYYY-MM-DD.log     # 每日操作紀錄
 │   └── (未來其它工具專屬日誌子目錄，如 logs/tool_a/ ...)
 │
 └── artifacts/                    # 📦 產出物保存目錄 (自動建立)
@@ -227,8 +228,8 @@ curl -X POST \
 - `logs/scraper_tool/`
 - `logs/monitor_job/`
 
-### 3. 日誌設定檔 `logs/all_log_config.js`
-所有日誌的保存與清理政策均在此檔集中管理：
+### 3. 操作日誌設定檔 `logs/operations/all_log_config.js`
+該組日誌的保存與清理政策直觀配置於 operations 目錄內：
 ```javascript
 module.exports = {
   operations: {
