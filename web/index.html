@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Playwright Automation Daemon | 控制台</title>
+  <title>Playwright Daemon | 控制台 & 代碼星雲圖</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -16,16 +16,38 @@
   <div class="app-container">
     <!-- 頂部導航列 -->
     <header class="app-header">
-      <div class="brand">
-        <div class="brand-icon">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <polygon points="5 3 19 12 5 21 5 3"></polygon>
-          </svg>
+      <div class="header-left">
+        <div class="brand">
+          <div class="brand-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polygon points="5 3 19 12 5 21 5 3"></polygon>
+            </svg>
+          </div>
+          <div class="brand-info">
+            <h1 class="brand-title">Playwright Daemon</h1>
+            <span class="brand-subtitle">常駐服務與代碼星雲架構圖</span>
+          </div>
         </div>
-        <div class="brand-info">
-          <h1 class="brand-title">Playwright Daemon</h1>
-          <span class="brand-subtitle">高擴充常駐自動化控制台</span>
-        </div>
+
+        <!-- 視圖切換分頁導航 -->
+        <nav class="nav-tabs">
+          <button id="tab-dashboard" class="nav-tab active" data-view="dashboard">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="3" width="7" height="7"></rect>
+              <rect x="14" y="3" width="7" height="7"></rect>
+              <rect x="14" y="14" width="7" height="7"></rect>
+              <rect x="3" y="14" width="7" height="7"></rect>
+            </svg>
+            <span>任務控制台</span>
+          </button>
+          <button id="tab-nebula" class="nav-tab" data-view="nebula">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="3"></circle>
+              <path d="M12 2v4m0 12v4M4.93 4.93l2.83 2.83m8.48 8.48l2.83 2.83M2 12h4m12 0h4M4.93 19.07l2.83-2.83m8.48-8.48l2.83-2.83"></path>
+            </svg>
+            <span>代碼星雲圖 (Code Nebula)</span>
+          </button>
+        </nav>
       </div>
 
       <div class="header-status-group">
@@ -59,135 +81,327 @@
       </div>
     </header>
 
-    <!-- 統計核心指標卡片區 -->
-    <section class="metrics-grid">
-      <div class="metric-card">
-        <div class="metric-header">
-          <span class="metric-label">瀏覽器常駐引擎</span>
-          <span class="metric-icon cyan">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <circle cx="12" cy="12" r="10"></circle>
-              <line x1="2" y1="12" x2="22" y2="12"></line>
-              <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
-            </svg>
-          </span>
-        </div>
-        <div class="metric-value" id="metric-browser-status">連線中</div>
-        <div class="metric-footer" id="metric-browser-sub">可用連線數: --</div>
-      </div>
-
-      <div class="metric-card">
-        <div class="metric-header">
-          <span class="metric-label">連線延遲</span>
-          <span class="metric-icon emerald">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
-            </svg>
-          </span>
-        </div>
-        <div class="metric-value" id="metric-latency">-- ms</div>
-        <div class="metric-footer">瀏覽器即時響應時間</div>
-      </div>
-
-      <div class="metric-card">
-        <div class="metric-header">
-          <span class="metric-label">已掛載任務插件</span>
-          <span class="metric-icon violet">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <rect x="3" y="3" width="7" height="7"></rect>
-              <rect x="14" y="3" width="7" height="7"></rect>
-              <rect x="14" y="14" width="7" height="7"></rect>
-              <rect x="3" y="14" width="7" height="7"></rect>
-            </svg>
-          </span>
-        </div>
-        <div class="metric-value" id="metric-task-count">0</div>
-        <div class="metric-footer">目錄: tasks/builtin/</div>
-      </div>
-
-      <div class="metric-card">
-        <div class="metric-header">
-          <span class="metric-label">操作日誌審計狀態</span>
-          <span class="metric-icon amber">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-              <polyline points="14 2 14 8 20 8"></polyline>
-              <line x1="16" y1="13" x2="8" y2="13"></line>
-              <line x1="16" y1="17" x2="8" y2="17"></line>
-              <polyline points="10 9 9 9 8 9"></polyline>
-            </svg>
-          </span>
-        </div>
-        <div class="metric-value" id="metric-log-status">30天輪轉</div>
-        <div class="metric-footer" id="metric-log-sub">目錄: logs/operations/</div>
-      </div>
-    </section>
-
-    <!-- 主面板分區：任務控制中心 (左) + 即時日誌終端 (右) -->
-    <main class="dashboard-split">
-      <!-- 左側：任務插件中心 -->
-      <section class="panel task-panel">
-        <div class="panel-header">
-          <div class="panel-title-group">
-            <h2 class="panel-title">任務控制中心 (Task Hub)</h2>
-            <span class="panel-caption">自動發現並掛載之 Playwright 任務</span>
+    <!-- =========================================================================
+         視圖 1：任務控制台 (Dashboard View)
+         ========================================================================= -->
+    <div id="view-dashboard-container" class="view-container active">
+      <!-- 統計核心指標卡片區 -->
+      <section class="metrics-grid">
+        <div class="metric-card">
+          <div class="metric-header">
+            <span class="metric-label">瀏覽器常駐引擎</span>
+            <span class="metric-icon cyan">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="2" y1="12" x2="22" y2="12"></line>
+                <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+              </svg>
+            </span>
           </div>
-          <button id="reload-tasks-btn" class="btn btn-sm btn-secondary" title="重新掃描任務">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"></path>
-            </svg>
-            掃描
-          </button>
+          <div class="metric-value" id="metric-browser-status">連線中</div>
+          <div class="metric-footer" id="metric-browser-sub">可用連線數: --</div>
         </div>
 
-        <div id="tasks-container" class="tasks-grid">
-          <!-- 動態載入任務卡片或純淨引導卡 -->
-          <div class="tasks-loading">正在載入任務清單...</div>
+        <div class="metric-card">
+          <div class="metric-header">
+            <span class="metric-label">連線延遲</span>
+            <span class="metric-icon emerald">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+              </svg>
+            </span>
+          </div>
+          <div class="metric-value" id="metric-latency">-- ms</div>
+          <div class="metric-footer">瀏覽器即時響應時間</div>
+        </div>
+
+        <div class="metric-card">
+          <div class="metric-header">
+            <span class="metric-label">已掛載任務插件</span>
+            <span class="metric-icon violet">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="3" width="7" height="7"></rect>
+                <rect x="14" y="3" width="7" height="7"></rect>
+                <rect x="14" y="14" width="7" height="7"></rect>
+                <rect x="3" y="14" width="7" height="7"></rect>
+              </svg>
+            </span>
+          </div>
+          <div class="metric-value" id="metric-task-count">0</div>
+          <div class="metric-footer">目錄: tasks/builtin/</div>
+        </div>
+
+        <div class="metric-card">
+          <div class="metric-header">
+            <span class="metric-label">操作日誌審計狀態</span>
+            <span class="metric-icon amber">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                <polyline points="14 2 14 8 20 8"></polyline>
+                <line x1="16" y1="13" x2="8" y2="13"></line>
+                <line x1="16" y1="17" x2="8" y2="17"></line>
+                <polyline points="10 9 9 9 8 9"></polyline>
+              </svg>
+            </span>
+          </div>
+          <div class="metric-value" id="metric-log-status">30天輪轉</div>
+          <div class="metric-footer" id="metric-log-sub">目錄: logs/operations/</div>
         </div>
       </section>
 
-      <!-- 右側：操作審計即時日誌終端 -->
-      <section class="panel log-panel">
-        <div class="panel-header">
-          <div class="panel-title-group">
-            <div class="title-with-ws">
-              <h2 class="panel-title">操作審計即時日誌</h2>
-              <div id="ws-indicator" class="ws-badge ws-connecting" title="WebSocket 即時串流連線狀態">
-                <span class="pulse-dot-sm"></span>
-                <span id="ws-status-text">WS 連線中</span>
-              </div>
+      <!-- 主面板分區：任務控制中心 (左) + 即時日誌終端 (右) -->
+      <main class="dashboard-split">
+        <!-- 左側：任務插件中心 -->
+        <section class="panel task-panel">
+          <div class="panel-header">
+            <div class="panel-title-group">
+              <h2 class="panel-title">任務控制中心 (Task Hub)</h2>
+              <span class="panel-caption">自動發現並掛載之 Playwright 任務</span>
             </div>
-            <span class="panel-caption">logs/operations/ 每日總紀錄串流</span>
+            <button id="reload-tasks-btn" class="btn btn-sm btn-secondary" title="重新掃描任務">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"></path>
+              </svg>
+              掃描
+            </button>
           </div>
 
-          <div class="log-controls">
-            <div class="filter-chips">
-              <button class="chip active" data-filter="ALL">全部</button>
-              <button class="chip" data-filter="INFO">資訊</button>
-              <button class="chip" data-filter="SUCCESS">成功</button>
-              <button class="chip" data-filter="WARNING">警告</button>
-              <button class="chip" data-filter="ERROR">異常</button>
-              <button class="chip" data-filter="DEBUG">除錯</button>
+          <div id="tasks-container" class="tasks-grid">
+            <div class="tasks-loading">正在載入任務清單...</div>
+          </div>
+        </section>
+
+        <!-- 右側：操作審計即時日誌終端 -->
+        <section class="panel log-panel">
+          <div class="panel-header">
+            <div class="panel-title-group">
+              <div class="title-with-ws">
+                <h2 class="panel-title">操作審計即時日誌</h2>
+                <div id="ws-indicator" class="ws-badge ws-connecting" title="WebSocket 即時串流連線狀態">
+                  <span class="pulse-dot-sm"></span>
+                  <span id="ws-status-text">WS 連線中</span>
+                </div>
+              </div>
+              <span class="panel-caption">logs/operations/ 每日總紀錄串流</span>
             </div>
-            <button id="clear-logs-btn" class="btn btn-sm btn-ghost" title="清空當前視窗日誌">清空</button>
-            <button id="view-config-btn" class="btn btn-sm btn-secondary" title="查看 all_log_config.js">日誌設定</button>
+
+            <div class="log-controls">
+              <div class="filter-chips">
+                <button class="chip active" data-filter="ALL">全部</button>
+                <button class="chip" data-filter="INFO">資訊</button>
+                <button class="chip" data-filter="SUCCESS">成功</button>
+                <button class="chip" data-filter="WARNING">警告</button>
+                <button class="chip" data-filter="ERROR">異常</button>
+                <button class="chip" data-filter="DEBUG">除錯</button>
+              </div>
+              <button id="clear-logs-btn" class="btn btn-sm btn-ghost" title="清空當前視窗日誌">清空</button>
+              <button id="view-config-btn" class="btn btn-sm btn-secondary" title="查看 all_log_config.js">日誌設定</button>
+            </div>
+          </div>
+
+          <div class="terminal-wrapper">
+            <div id="terminal-body" class="terminal-body">
+              <div class="terminal-line system-line">[系統啟動] 即時日誌連線就緒，等待操作事件...</div>
+            </div>
+            <div class="terminal-footer">
+              <span id="log-count-text">顯示 1 筆紀錄</span>
+              <label class="autoscroll-toggle">
+                <input type="checkbox" id="autoscroll-chk" checked>
+                <span>自動向下捲動</span>
+              </label>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <!-- =========================================================================
+         視圖 2：代碼星雲圖 (Code Nebula View)
+         ========================================================================= -->
+    <div id="view-nebula-container" class="view-container">
+      <section class="nebula-layout">
+        <!-- 專案目錄切換與自訂匯入列 -->
+        <div class="nebula-project-bar">
+          <div class="project-info-group">
+            <span class="project-label">目前分析專案:</span>
+            <div id="nebula-current-project-badge" class="project-badge" title="當前解析目錄">
+              <span class="folder-icon">📁</span>
+              <span id="nebula-current-project-name">載入中...</span>
+              <span id="nebula-current-project-path" class="project-path-text"></span>
+            </div>
+          </div>
+          <div class="project-switch-group">
+            <input type="text" id="nebula-custom-path-input" class="project-path-input" placeholder="輸入或貼上任意本機專案絕對路徑 (如: D:\Projects\MyOtherApp)..." spellcheck="false">
+            <button id="nebula-switch-project-btn" class="btn btn-sm btn-primary">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"></path>
+              </svg>
+              匯入並分析專案
+            </button>
+            <button id="nebula-reset-project-btn" class="btn btn-sm btn-outline" title="還原為當前 Playwright 專案">
+              還原預設
+            </button>
           </div>
         </div>
 
-        <div class="terminal-wrapper">
-          <div id="terminal-body" class="terminal-body">
-            <div class="terminal-line system-line">[系統啟動] 即時日誌連線就緒，等待操作事件...</div>
-          </div>
-          <div class="terminal-footer">
-            <span id="log-count-text">顯示 1 筆紀錄</span>
-            <label class="autoscroll-toggle">
-              <input type="checkbox" id="autoscroll-chk" checked>
-              <span>自動向下捲動</span>
+        <!-- 星雲控制工具列 -->
+        <div class="nebula-toolbar">
+          <div class="toolbar-left">
+            <!-- 符號搜尋輸入框與下拉建議 -->
+            <div class="nebula-search-box">
+              <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+              </svg>
+              <input type="text" id="nebula-symbol-input" placeholder="輸入函數、類別或方法 (例如: check_health, OperationLogger)..." autocomplete="off" spellcheck="false">
+              <div id="nebula-suggestions" class="suggestions-dropdown hidden"></div>
+            </div>
+
+            <!-- 深度調整滑桿 -->
+            <div class="depth-control-group">
+              <label for="nebula-depth-slider" class="control-label">
+                關聯深度: <span id="nebula-depth-val" class="depth-badge">2</span>
+              </label>
+              <input type="range" id="nebula-depth-slider" min="1" max="5" value="2" step="1">
+            </div>
+
+            <!-- 方向過濾器 -->
+            <div class="direction-chips">
+              <button class="dir-chip active" data-direction="both" title="同時顯示誰呼叫我與我呼叫誰">雙向關聯</button>
+              <button class="dir-chip" data-direction="upstream" title="僅查看是誰呼叫此函數 (上游 Caller)">誰呼叫我</button>
+              <button class="dir-chip" data-direction="downstream" title="僅查看此函數內部呼叫了誰 (下游 Callee)">我呼叫誰</button>
+            </div>
+
+            <!-- 外部庫切換開關 -->
+            <label class="toggle-checkbox" title="是否顯示 Python 內建或第三方庫的呼叫連線">
+              <input type="checkbox" id="nebula-ext-chk">
+              <span>包含外部函式庫</span>
             </label>
           </div>
+
+          <div class="toolbar-right">
+            <button id="nebula-export-btn" class="btn btn-sm btn-secondary" title="匯出當前星雲圖為 SVG / PNG 圖片">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                <polyline points="21 15 16 10 5 21"></polyline>
+              </svg>
+              匯出圖片
+            </button>
+            <button id="nebula-rescan-btn" class="btn btn-sm btn-secondary" title="重新掃描專案 AST 語法樹">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"></path>
+              </svg>
+              重新掃描專案
+            </button>
+            <button id="nebula-reset-cam-btn" class="btn btn-sm btn-ghost" title="重設視角至中心">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"></circle>
+                <circle cx="12" cy="12" r="3"></circle>
+              </svg>
+              置中視角
+            </button>
+          </div>
+        </div>
+
+        <!-- 星雲圖主要渲染畫布 -->
+        <div class="nebula-stage">
+          <div id="nebula-canvas-wrapper" class="canvas-wrapper">
+            <svg id="nebula-svg"></svg>
+            
+            <!-- 空狀態/引導提示層 -->
+            <div id="nebula-empty-state" class="nebula-empty-state hidden">
+              <div class="empty-nebula-icon">🌌</div>
+              <h3>探索代碼星雲</h3>
+              <p>請在上方搜尋欄輸入任意函數或類別名稱，系統將以其為中心繪製立體關聯圖。</p>
+              <div class="quick-sample-tags">
+                <span>快速體驗:</span>
+                <button class="sample-tag" data-target="get_health_status">get_health_status</button>
+                <button class="sample-tag" data-target="BrowserManager">BrowserManager</button>
+                <button class="sample-tag" data-target="OperationLogger">OperationLogger</button>
+                <button class="sample-tag" data-target="task_registry">task_registry</button>
+              </div>
+            </div>
+
+            <!-- 圖例與資訊標記 -->
+            <div class="nebula-legend">
+              <div class="legend-item"><span class="legend-dot cyan"></span><span>Core (核心)</span></div>
+              <div class="legend-item"><span class="legend-dot blue"></span><span>API (介面)</span></div>
+              <div class="legend-item"><span class="legend-dot violet"></span><span>Tasks (任務)</span></div>
+              <div class="legend-item"><span class="legend-dot emerald"></span><span>Tools (工具)</span></div>
+              <div class="legend-item"><span class="legend-dot amber"></span><span>Tests (測試)</span></div>
+              <div class="legend-item"><span class="legend-dot gray"></span><span>External (外部)</span></div>
+            </div>
+
+            <!-- 統計資訊浮層 -->
+            <div id="nebula-info-badge" class="nebula-info-badge">
+              載入星雲中...
+            </div>
+          </div>
+
+          <!-- 右側代碼自省抽屜 (Code Inspector Drawer) -->
+          <aside id="nebula-inspector" class="inspector-drawer hidden">
+            <div class="inspector-header">
+              <div class="inspector-title-group">
+                <div class="inspector-history-bar">
+                  <div class="history-btn-group">
+                    <button id="inspector-back-btn" class="icon-nav-btn" title="上一個瀏覽符號" disabled>&larr;</button>
+                    <button id="inspector-fwd-btn" class="icon-nav-btn" title="下一個瀏覽符號" disabled>&rarr;</button>
+                  </div>
+                  <span id="inspector-type-badge" class="type-badge">FUNCTION</span>
+                </div>
+                <h3 id="inspector-name" class="inspector-title">symbol_name</h3>
+                <span id="inspector-path" class="inspector-path">path/to/file.py:L10-L40</span>
+              </div>
+              <button id="close-inspector-btn" class="icon-btn close-btn">&times;</button>
+            </div>
+
+            <div class="inspector-actions">
+              <button id="inspector-recenter-btn" class="btn btn-primary btn-sm" title="以此節點為新星雲中心重新繪製">
+                🪐 以此為中心重繪 (Re-center)
+              </button>
+              <button id="inspector-copy-path-btn" class="btn btn-secondary btn-sm" title="複製符號完整 ID">
+                📋 複製 ID
+              </button>
+            </div>
+
+            <div class="inspector-body">
+              <!-- Docstring 說明 -->
+              <div id="inspector-doc-group" class="inspector-section">
+                <h4 class="section-title">功能說明 (Docstring)</h4>
+                <div id="inspector-doc" class="docstring-content">無說明文件</div>
+              </div>
+
+              <!-- 函式簽名 -->
+              <div id="inspector-sig-group" class="inspector-section">
+                <h4 class="section-title">函數簽名</h4>
+                <pre id="inspector-sig" class="sig-code">()</pre>
+              </div>
+
+              <!-- 原始碼預覽 -->
+              <div class="inspector-section">
+                <h4 class="section-title">原始程式碼</h4>
+                <div class="code-viewer-wrapper">
+                  <pre><code id="inspector-code" class="python-code"># 正在載入代碼...</code></pre>
+                </div>
+              </div>
+
+              <!-- 上游調用者清單 -->
+              <div class="inspector-section">
+                <h4 class="section-title">誰呼叫了它 (Callers - <span id="inspector-callers-count">0</span>)</h4>
+                <div id="inspector-callers-list" class="rel-chips-list"></div>
+              </div>
+
+              <!-- 下游依賴清單 -->
+              <div class="inspector-section">
+                <h4 class="section-title">它呼叫了誰 (Callees - <span id="inspector-callees-count">0</span>)</h4>
+                <div id="inspector-callees-list" class="rel-chips-list"></div>
+              </div>
+            </div>
+          </aside>
         </div>
       </section>
-    </main>
+    </div>
   </div>
 
   <!-- 任務執行輸入表單 Modal -->
@@ -248,6 +462,11 @@
     </div>
   </div>
 
+  <!-- 載入 D3.js 力導向圖形庫 -->
+  <script src="/static/vendor/d3.min.js"></script>
+  <!-- 載入代碼星雲圖模組 -->
+  <script src="/static/js/nebula.js"></script>
+  <!-- 載入控制台主應用程式 -->
   <script src="/static/js/app.js"></script>
 </body>
 </html>

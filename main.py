@@ -63,7 +63,9 @@ app = FastAPI(
 )
 
 # 掛載 API 路由
+from api.nebula_routes import nebula_router
 app.include_router(router)
+app.include_router(nebula_router)
 
 # 掛載靜態資源與產出物預覽
 from pathlib import Path

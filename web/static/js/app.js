@@ -74,6 +74,23 @@
       elements.apiKeyInput.type = type;
     });
 
+    // 視圖切換 (Dashboard vs Nebula)
+    document.querySelectorAll('.nav-tab').forEach((tab) => {
+      tab.addEventListener('click', (e) => {
+        const targetView = e.currentTarget.dataset.view;
+        document.querySelectorAll('.nav-tab').forEach((t) => t.classList.remove('active'));
+        document.querySelectorAll('.view-container').forEach((v) => v.classList.remove('active'));
+
+        e.currentTarget.classList.add('active');
+        const targetContainer = document.getElementById(`view-${targetView}-container`);
+        if (targetContainer) targetContainer.classList.add('active');
+
+        if (targetView === 'nebula' && window.NebulaApp) {
+          window.NebulaApp.handleResize();
+        }
+      });
+    });
+
     // 重新整理
     elements.refreshBtn.addEventListener('click', () => {
       fetchHealth();
@@ -122,6 +139,11 @@
     fetchHealth();
     fetchTasks();
     initWebSocket();
+
+    // 啟動代碼星雲圖模組
+    if (window.NebulaApp) {
+      window.NebulaApp.init();
+    }
   }
 
   /* ==========================================================================

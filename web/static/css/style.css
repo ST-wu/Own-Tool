@@ -92,6 +92,12 @@ body {
   box-shadow: 0 4px 24px rgba(0, 0, 0, 0.2);
 }
 
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+}
+
 .brand {
   display: flex;
   align-items: center;
@@ -123,6 +129,61 @@ body {
   font-size: 0.75rem;
   color: var(--text-muted);
   display: block;
+}
+
+/* 頂部導航分頁 (Nav Tabs) */
+.nav-tabs {
+  display: flex;
+  background: rgba(0, 0, 0, 0.35);
+  padding: 4px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-subtle);
+  gap: 4px;
+}
+
+.nav-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  background: transparent;
+  border: none;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: var(--transition-fast);
+}
+
+.nav-tab:hover {
+  color: var(--text-main);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.nav-tab.active {
+  background: linear-gradient(135deg, rgba(14, 165, 233, 0.2), rgba(99, 102, 241, 0.2));
+  color: #38bdf8;
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  box-shadow: 0 0 10px rgba(56, 189, 248, 0.15);
+}
+
+/* 視圖切換容器 */
+.view-container {
+  display: none;
+  width: 100%;
+}
+
+.view-container.active {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  animation: fadeIn 0.25s ease forwards;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 .header-status-group {
@@ -810,6 +871,685 @@ body {
 
 .hidden { display: none !important; }
 
+/* ==========================================================================
+   代碼星雲圖佈局與組件 (Code Nebula Design System)
+   ========================================================================== */
+.nebula-layout {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+}
+
+/* 專案目錄切換列 */
+.nebula-project-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 18px;
+  background: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(14px);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.project-info-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.project-label {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.project-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(14, 165, 233, 0.12);
+  border: 1px solid rgba(56, 189, 248, 0.25);
+  padding: 4px 12px;
+  border-radius: var(--radius-sm);
+  font-size: 0.8125rem;
+  color: #fff;
+}
+
+.project-path-text {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  color: var(--accent-cyan);
+}
+
+.project-switch-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+  max-width: 620px;
+}
+
+.project-path-input {
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  padding: 6px 12px;
+  color: #fff;
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  flex: 1;
+  outline: none;
+  transition: var(--transition-fast);
+}
+
+.project-path-input:focus {
+  border-color: var(--accent-cyan);
+  box-shadow: 0 0 8px rgba(6, 182, 212, 0.2);
+}
+
+/* 控制工具列 */
+.nebula-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 20px;
+  background: var(--bg-surface);
+  backdrop-filter: blur(16px);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.toolbar-left, .toolbar-right {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+/* 搜尋輸入與建議下拉框 */
+.nebula-search-box {
+  position: relative;
+  display: flex;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 2px 10px;
+  width: 360px;
+  transition: var(--transition-fast);
+}
+
+.nebula-search-box:focus-within {
+  border-color: var(--accent-cyan);
+  box-shadow: 0 0 14px rgba(6, 182, 212, 0.25);
+}
+
+.search-icon {
+  color: var(--text-muted);
+  flex-shrink: 0;
+}
+
+.nebula-search-box input {
+  background: transparent;
+  border: none;
+  outline: none;
+  color: #fff;
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  padding: 8px 10px;
+  width: 100%;
+}
+
+.suggestions-dropdown {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  width: 100%;
+  background: #0f172a;
+  border: 1px solid var(--border-active);
+  border-radius: var(--radius-md);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.6);
+  z-index: 50;
+  max-height: 280px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.suggestion-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  cursor: pointer;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  transition: var(--transition-fast);
+}
+
+.suggestion-item:hover {
+  background: rgba(56, 189, 248, 0.15);
+}
+
+.suggestion-main {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.suggestion-name {
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: #f8fafc;
+}
+
+.suggestion-id {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  color: var(--text-muted);
+}
+
+.suggestion-badge {
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.badge-core { background: rgba(6, 182, 212, 0.2); color: var(--accent-cyan); }
+.badge-api { background: rgba(59, 130, 246, 0.2); color: var(--accent-blue); }
+.badge-tasks { background: rgba(168, 85, 247, 0.2); color: var(--accent-purple); }
+.badge-tools { background: rgba(16, 185, 129, 0.2); color: var(--accent-emerald); }
+.badge-tests { background: rgba(245, 158, 11, 0.2); color: var(--accent-amber); }
+
+/* 深度調整群組 */
+.depth-control-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(0, 0, 0, 0.25);
+  padding: 4px 10px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-subtle);
+}
+
+.control-label {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+}
+
+.depth-badge {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  color: var(--accent-cyan);
+}
+
+.depth-control-group input[type="range"] {
+  width: 80px;
+  accent-color: var(--accent-cyan);
+}
+
+/* 方向切換晶片按鈕 */
+.direction-chips {
+  display: flex;
+  background: rgba(0, 0, 0, 0.35);
+  padding: 2px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-subtle);
+}
+
+.dir-chip {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  padding: 4px 10px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: var(--transition-fast);
+}
+
+.dir-chip.active {
+  background: rgba(255, 255, 255, 0.12);
+  color: #38bdf8;
+  font-weight: 500;
+}
+
+.toggle-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  cursor: pointer;
+}
+
+.toggle-checkbox input {
+  accent-color: var(--accent-cyan);
+}
+
+/* ==========================================================================
+   星雲畫布舞台 (Nebula Stage & SVG)
+   ========================================================================== */
+.nebula-stage {
+  position: relative;
+  width: 100%;
+  height: 720px;
+  background: radial-gradient(circle at 50% 50%, #0d1322 0%, #060911 100%);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.8), 0 8px 32px rgba(0, 0, 0, 0.4);
+}
+
+.canvas-wrapper {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+#nebula-svg {
+  width: 100%;
+  height: 100%;
+  cursor: grab;
+}
+
+#nebula-svg:active {
+  cursor: grabbing;
+}
+
+/* 星雲連線 */
+.nebula-link {
+  stroke: rgba(56, 189, 248, 0.25);
+  stroke-width: 1.5px;
+  transition: stroke 0.2s ease, opacity 0.2s ease;
+}
+
+.nebula-link.link-inherits {
+  stroke: rgba(168, 85, 247, 0.4);
+  stroke-dasharray: 4 2;
+}
+
+.nebula-link:hover {
+  stroke: rgba(56, 189, 248, 0.8);
+  stroke-width: 2.5px;
+}
+
+/* 焦點路徑互動高亮 (Incident Path Highlighting) */
+.nebula-node.dimmed {
+  opacity: 0.15;
+  filter: grayscale(80%);
+  transition: opacity 0.2s ease, filter 0.2s ease;
+}
+
+.nebula-link.dimmed {
+  opacity: 0.05 !important;
+  stroke: rgba(255, 255, 255, 0.1) !important;
+  transition: opacity 0.2s ease;
+}
+
+.nebula-link.highlighted-out {
+  stroke: #38bdf8 !important;
+  stroke-width: 3px !important;
+  opacity: 1 !important;
+  filter: drop-shadow(0 0 8px rgba(56, 189, 248, 0.8));
+}
+
+.nebula-link.highlighted-in {
+  stroke: #a855f7 !important;
+  stroke-width: 3px !important;
+  opacity: 1 !important;
+  filter: drop-shadow(0 0 8px rgba(168, 85, 247, 0.8));
+}
+
+.nebula-node.highlighted .node-circle {
+  stroke: #fff;
+  transform: scale(1.15);
+  filter: drop-shadow(0 0 16px currentColor);
+}
+
+/* 星雲節點 */
+.nebula-node {
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.node-circle {
+  stroke: rgba(255, 255, 255, 0.3);
+  stroke-width: 2px;
+  transition: transform 0.2s ease, filter 0.2s ease;
+  filter: drop-shadow(0 0 6px rgba(0, 0, 0, 0.5));
+}
+
+.nebula-node:hover .node-circle {
+  transform: scale(1.2);
+  stroke: #fff;
+  filter: drop-shadow(0 0 14px currentColor);
+}
+
+/* 中心恆星脈衝環 */
+.pulse-halo {
+  fill: none;
+  stroke: rgba(6, 182, 212, 0.4);
+  stroke-width: 2px;
+  animation: pulse-ring 2.5s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+}
+
+.center-node .node-circle {
+  stroke: #38bdf8;
+  stroke-width: 3px;
+  filter: drop-shadow(0 0 16px rgba(56, 189, 248, 0.6));
+}
+
+.node-label {
+  fill: #f8fafc;
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  font-weight: 600;
+  pointer-events: none;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.9);
+}
+
+.node-sublabel {
+  fill: #94a3b8;
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  pointer-events: none;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.9);
+}
+
+/* 圖例 */
+.nebula-legend {
+  position: absolute;
+  bottom: 16px;
+  left: 20px;
+  display: flex;
+  gap: 12px;
+  background: rgba(15, 23, 42, 0.75);
+  backdrop-filter: blur(12px);
+  padding: 6px 14px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-subtle);
+  font-size: 0.6875rem;
+  color: var(--text-muted);
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.legend-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.legend-dot.cyan { background: var(--accent-cyan); box-shadow: 0 0 6px var(--accent-cyan); }
+.legend-dot.blue { background: var(--accent-blue); box-shadow: 0 0 6px var(--accent-blue); }
+.legend-dot.violet { background: var(--accent-purple); box-shadow: 0 0 6px var(--accent-purple); }
+.legend-dot.emerald { background: var(--accent-emerald); box-shadow: 0 0 6px var(--accent-emerald); }
+.legend-dot.amber { background: var(--accent-amber); box-shadow: 0 0 6px var(--accent-amber); }
+.legend-dot.gray { background: #64748b; }
+
+/* 狀態浮層 */
+.nebula-info-badge {
+  position: absolute;
+  top: 16px;
+  left: 20px;
+  background: rgba(15, 23, 42, 0.8);
+  backdrop-filter: blur(12px);
+  padding: 6px 14px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-subtle);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--accent-cyan);
+}
+
+/* 空狀態 */
+.nebula-empty-state {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  max-width: 440px;
+}
+
+.empty-nebula-icon {
+  font-size: 3rem;
+}
+
+.quick-sample-tags {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 8px;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.sample-tag {
+  background: rgba(14, 165, 233, 0.15);
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  color: #38bdf8;
+  padding: 2px 8px;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  cursor: pointer;
+  transition: var(--transition-fast);
+}
+
+.sample-tag:hover {
+  background: rgba(14, 165, 233, 0.3);
+  border-color: #38bdf8;
+}
+
+/* ==========================================================================
+   代碼自省抽屜 (Code Inspector Drawer)
+   ========================================================================== */
+.inspector-drawer {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 440px;
+  height: 100%;
+  background: rgba(15, 23, 42, 0.92);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-left: 1px solid var(--border-subtle);
+  box-shadow: -10px 0 30px rgba(0, 0, 0, 0.5);
+  display: flex;
+  flex-direction: column;
+  z-index: 40;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  transform: translateX(0);
+}
+
+.inspector-drawer.hidden {
+  transform: translateX(105%);
+}
+
+.inspector-header {
+  padding: 16px 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.inspector-history-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.history-btn-group {
+  display: inline-flex;
+  gap: 4px;
+}
+
+.icon-nav-btn {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--border-subtle);
+  color: #fff;
+  border-radius: var(--radius-sm);
+  width: 26px;
+  height: 26px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 0.875rem;
+  transition: var(--transition-fast);
+}
+
+.icon-nav-btn:hover:not(:disabled) {
+  background: rgba(56, 189, 248, 0.3);
+  border-color: #38bdf8;
+}
+
+.icon-nav-btn:disabled {
+  opacity: 0.25;
+  cursor: not-allowed;
+}
+
+.inspector-title-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.inspector-title {
+  font-size: 1.0625rem;
+  font-weight: 700;
+  color: #fff;
+  word-break: break-all;
+}
+
+.inspector-path {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  color: var(--accent-cyan);
+}
+
+.inspector-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 20px;
+  background: rgba(0, 0, 0, 0.3);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.inspector-body {
+  padding: 20px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  flex: 1;
+}
+
+.inspector-section {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.section-title {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.docstring-content {
+  font-size: 0.8125rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  background: rgba(255, 255, 255, 0.03);
+  padding: 8px 12px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-subtle);
+  white-space: pre-wrap;
+}
+
+.sig-code {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: #38bdf8;
+  background: rgba(0, 0, 0, 0.4);
+  padding: 6px 10px;
+  border-radius: var(--radius-sm);
+  border: 1px solid rgba(56, 189, 248, 0.2);
+  white-space: pre-wrap;
+}
+
+.code-viewer-wrapper {
+  background: var(--bg-terminal);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 12px;
+  max-height: 280px;
+  overflow-y: auto;
+}
+
+.python-code {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: #e2e8f0;
+  line-height: 1.5;
+  white-space: pre;
+}
+
+/* 代碼關鍵字語法高亮 (Syntax Tokens) */
+.token-kw { color: #f43f5e; font-weight: 600; }
+.token-def { color: #38bdf8; font-weight: 600; }
+.token-str { color: #34d399; }
+.token-comment { color: #64748b; font-style: italic; }
+.token-decorator { color: #fbbf24; }
+.token-builtin { color: #a78bfa; }
+
+.rel-chips-list {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.rel-chip {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-secondary);
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  padding: 3px 8px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: var(--transition-fast);
+}
+
+.rel-chip:hover {
+  background: rgba(56, 189, 248, 0.2);
+  border-color: var(--accent-cyan);
+  color: #fff;
+}
+
 /* 響應式佈局 */
 @media (max-width: 1100px) {
   .dashboard-split {
@@ -817,6 +1557,9 @@ body {
   }
   .metrics-grid {
     grid-template-columns: repeat(2, 1fr);
+  }
+  .inspector-drawer {
+    width: 100%;
   }
 }
 
@@ -832,5 +1575,8 @@ body {
   .header-actions {
     width: 100%;
     justify-content: space-between;
+  }
+  .nebula-search-box {
+    width: 100%;
   }
 }
