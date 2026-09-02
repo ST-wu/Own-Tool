@@ -3,51 +3,31 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Playwright Daemon | 控制台 & 代碼星雲圖</title>
+  <title>Playwright Automation & Tool Ecosystem</title>
+  <!-- Google Fonts: Inter & JetBrains Mono -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/static/css/style.css">
 </head>
-<body class="dark-theme">
-  <!-- 背景流光特效層 -->
-  <div class="glow-bg-mesh"></div>
-
-  <div class="app-container">
-    <!-- 頂部導航列 -->
+<body>
+  <div class="app-wrapper">
+    <!-- 頂部導覽列 (Header) -->
     <header class="app-header">
       <div class="header-left">
         <div class="brand">
           <div class="brand-icon">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <polygon points="5 3 19 12 5 21 5 3"></polygon>
+              <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+              <polyline points="2 17 12 22 22 17"></polyline>
+              <polyline points="2 12 12 17 22 12"></polyline>
             </svg>
           </div>
-          <div class="brand-info">
-            <h1 class="brand-title">Playwright Daemon</h1>
-            <span class="brand-subtitle">常駐服務與代碼星雲架構圖</span>
+          <div>
+            <h1 class="brand-title">Playwright Tool Ecosystem</h1>
+            <span class="brand-subtitle">自動化瀏覽器服務與開發者工具套件</span>
           </div>
         </div>
-
-        <!-- 視圖切換分頁導航 -->
-        <nav class="nav-tabs">
-          <button id="tab-dashboard" class="nav-tab active" data-view="dashboard">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <rect x="3" y="3" width="7" height="7"></rect>
-              <rect x="14" y="3" width="7" height="7"></rect>
-              <rect x="14" y="14" width="7" height="7"></rect>
-              <rect x="3" y="14" width="7" height="7"></rect>
-            </svg>
-            <span>任務控制台</span>
-          </button>
-          <button id="tab-nebula" class="nav-tab" data-view="nebula">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <circle cx="12" cy="12" r="3"></circle>
-              <path d="M12 2v4m0 12v4M4.93 4.93l2.83 2.83m8.48 8.48l2.83 2.83M2 12h4m12 0h4M4.93 19.07l2.83-2.83m8.48-8.48l2.83-2.83"></path>
-            </svg>
-            <span>代碼星雲圖 (Code Nebula)</span>
-          </button>
-        </nav>
       </div>
 
       <div class="header-status-group">
@@ -82,9 +62,49 @@
     </header>
 
     <!-- =========================================================================
-         視圖 1：任務控制台 (Dashboard View)
+         視圖 1：主功能選單與控制中心 (Main Tool & Task Hub)
          ========================================================================= -->
     <div id="view-dashboard-container" class="view-container active">
+      <!-- 輔助工具箱功能選單卡片區 -->
+      <section class="tools-showcase-section">
+        <div class="section-title-bar">
+          <h2 class="section-heading">🛠️ 輔助開發與生產力工具 (Integrated Tool Suite)</h2>
+          <span class="section-desc">已掛載之立體架構視覺化與知識庫測驗系統</span>
+        </div>
+
+        <div class="tools-grid">
+          <!-- 工具卡片 1：代碼星雲圖 -->
+          <div class="tool-feature-card" id="open-tool-nebula-card">
+            <div class="tool-card-glow cyan"></div>
+            <div class="tool-card-header">
+              <div class="tool-icon-wrapper cyan">🌌</div>
+              <span class="tool-status-pill">AST 知識圖譜</span>
+            </div>
+            <h3 class="tool-card-title">代碼星雲圖 (Code Nebula)</h3>
+            <p class="tool-card-desc">全專案 AST 靜態語法樹、跨模組呼叫鏈立體關聯、多層級 BFS 深度探索與原始碼自省抽屜。</p>
+            <div class="tool-card-footer">
+              <span class="tool-meta-text">支援任意本機專案路徑切換</span>
+              <button class="btn btn-sm btn-primary" id="btn-enter-nebula">開啟星雲圖 &rarr;</button>
+            </div>
+          </div>
+
+          <!-- 工具卡片 2：模擬測驗系統 -->
+          <div class="tool-feature-card" id="open-tool-exam-card">
+            <div class="tool-card-glow violet"></div>
+            <div class="tool-card-header">
+              <div class="tool-icon-wrapper violet">🎯</div>
+              <span class="tool-status-pill">熱插拔題庫</span>
+            </div>
+            <h3 class="tool-card-title">模擬測驗系統 (Exam Hub)</h3>
+            <p class="tool-card-desc">多科目可插拔式題庫模擬測驗引擎，支援即時練習、全真模擬考（計時評分）與專屬錯題本複習。</p>
+            <div class="tool-card-footer">
+              <span class="tool-meta-text" id="tool-exam-meta-text">內建 AI-103 題庫 (182 題)</span>
+              <button class="btn btn-sm btn-primary" id="btn-enter-exam">開啟測驗系統 &rarr;</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <!-- 統計核心指標卡片區 -->
       <section class="metrics-grid">
         <div class="metric-card">
@@ -94,7 +114,7 @@
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <circle cx="12" cy="12" r="10"></circle>
                 <line x1="2" y1="12" x2="22" y2="12"></line>
-                <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+                <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1 4-10z"></path>
               </svg>
             </span>
           </div>
@@ -155,8 +175,8 @@
         <section class="panel task-panel">
           <div class="panel-header">
             <div class="panel-title-group">
-              <h2 class="panel-title">任務控制中心 (Task Hub)</h2>
-              <span class="panel-caption">自動發現並掛載之 Playwright 任務</span>
+              <h2 class="panel-title">🧩 Playwright 任務控制中心 (Task Hub)</h2>
+              <span class="panel-caption">自動發現並掛載之瀏覽器自動化任務</span>
             </div>
             <button id="reload-tasks-btn" class="btn btn-sm btn-secondary" title="重新掃描任務">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -176,7 +196,7 @@
           <div class="panel-header">
             <div class="panel-title-group">
               <div class="title-with-ws">
-                <h2 class="panel-title">操作審計即時日誌</h2>
+                <h2 class="panel-title">📝 操作審計即時日誌</h2>
                 <div id="ws-indicator" class="ws-badge ws-connecting" title="WebSocket 即時串流連線狀態">
                   <span class="pulse-dot-sm"></span>
                   <span id="ws-status-text">WS 連線中</span>
@@ -188,38 +208,38 @@
             <div class="log-controls">
               <div class="filter-chips">
                 <button class="chip active" data-filter="ALL">全部</button>
-                <button class="chip" data-filter="INFO">資訊</button>
-                <button class="chip" data-filter="SUCCESS">成功</button>
-                <button class="chip" data-filter="WARNING">警告</button>
-                <button class="chip" data-filter="ERROR">異常</button>
-                <button class="chip" data-filter="DEBUG">除錯</button>
+                <button class="chip" data-filter="INFO">INFO</button>
+                <button class="chip" data-filter="WARNING">WARN</button>
+                <button class="chip" data-filter="DEBUG">DEBUG</button>
               </div>
-              <button id="clear-logs-btn" class="btn btn-sm btn-ghost" title="清空當前視窗日誌">清空</button>
-              <button id="view-config-btn" class="btn btn-sm btn-secondary" title="查看 all_log_config.js">日誌設定</button>
+              <button id="view-config-btn" class="btn btn-xs btn-outline" title="查看操作日誌配置 (all_log_config.js)">日誌配置</button>
+              <button id="clear-logs-btn" class="btn btn-xs btn-ghost" title="清空終端機視窗">清空視窗</button>
             </div>
           </div>
 
-          <div class="terminal-wrapper">
-            <div id="terminal-body" class="terminal-body">
-              <div class="terminal-line system-line">[系統啟動] 即時日誌連線就緒，等待操作事件...</div>
-            </div>
-            <div class="terminal-footer">
-              <span id="log-count-text">顯示 1 筆紀錄</span>
-              <label class="autoscroll-toggle">
-                <input type="checkbox" id="autoscroll-chk" checked>
-                <span>自動向下捲動</span>
-              </label>
-            </div>
+          <div id="log-terminal" class="terminal-window">
+            <div class="terminal-empty-hint">等待伺服器操作日誌串流傳輸...</div>
           </div>
         </section>
       </main>
     </div>
 
     <!-- =========================================================================
-         視圖 2：代碼星雲圖 (Code Nebula View)
+         視圖 2：代碼星雲圖工作區 (Code Nebula Workspace)
          ========================================================================= -->
     <div id="view-nebula-container" class="view-container">
       <section class="nebula-layout">
+        <!-- 專案工作區頂部返回導航列 -->
+        <div class="workspace-nav-bar">
+          <button id="nebula-back-to-hub-btn" class="btn btn-sm btn-secondary back-to-hub-btn">
+            &larr; 返回工具總覽首頁
+          </button>
+          <div class="workspace-title-group">
+            <span class="workspace-pill cyan">🌌 輔助工具</span>
+            <h2 class="workspace-title">代碼星雲圖 (Code Nebula)</h2>
+          </div>
+        </div>
+
         <!-- 專案目錄切換與自訂匯入列 -->
         <div class="nebula-project-bar">
           <div class="project-info-group">
@@ -339,7 +359,7 @@
             </div>
           </div>
 
-          <!-- 右側代碼自省抽屜 (Code Inspector Drawer) -->
+          <!-- 右側代碼自省抽屜 -->
           <aside id="nebula-inspector" class="inspector-drawer hidden">
             <div class="inspector-header">
               <div class="inspector-title-group">
@@ -366,19 +386,16 @@
             </div>
 
             <div class="inspector-body">
-              <!-- Docstring 說明 -->
               <div id="inspector-doc-group" class="inspector-section">
                 <h4 class="section-title">功能說明 (Docstring)</h4>
                 <div id="inspector-doc" class="docstring-content">無說明文件</div>
               </div>
 
-              <!-- 函式簽名 -->
               <div id="inspector-sig-group" class="inspector-section">
                 <h4 class="section-title">函數簽名</h4>
                 <pre id="inspector-sig" class="sig-code">()</pre>
               </div>
 
-              <!-- 原始碼預覽 -->
               <div class="inspector-section">
                 <h4 class="section-title">原始程式碼</h4>
                 <div class="code-viewer-wrapper">
@@ -386,13 +403,11 @@
                 </div>
               </div>
 
-              <!-- 上游調用者清單 -->
               <div class="inspector-section">
                 <h4 class="section-title">誰呼叫了它 (Callers - <span id="inspector-callers-count">0</span>)</h4>
                 <div id="inspector-callers-list" class="rel-chips-list"></div>
               </div>
 
-              <!-- 下游依賴清單 -->
               <div class="inspector-section">
                 <h4 class="section-title">它呼叫了誰 (Callees - <span id="inspector-callees-count">0</span>)</h4>
                 <div id="inspector-callees-list" class="rel-chips-list"></div>
@@ -402,10 +417,243 @@
         </div>
       </section>
     </div>
+
+    <!-- =========================================================================
+         視圖 3：模擬測驗系統工作區 (Exam Simulator Workspace - 原生設計還原)
+         ========================================================================= -->
+    <div id="view-exam-container" class="view-container">
+      <div class="exam-app-wrapper">
+        <!-- Top Navigation Header -->
+        <header class="navbar glass-panel">
+          <div class="logo-group">
+            <div class="logo-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M2 17L12 22L22 17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M2 12L12 17L22 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <div class="logo-text">
+              <h1 id="exam-logo-title">Azure AI-103</h1>
+              <span class="badge">PRO EXAM</span>
+            </div>
+          </div>
+
+          <div class="header-controls">
+            <!-- 題庫切換下拉選單 (Bank Selector) -->
+            <div class="bank-selector-wrap">
+              <select id="exam-bank-select" class="custom-select bank-navbar-select" title="切換題庫科目">
+                <option value="ai-103">📚 載入題庫中...</option>
+              </select>
+            </div>
+
+            <!-- 三大模式按鈕 -->
+            <div class="mode-selector">
+              <button class="mode-btn active" id="btn-practice-mode" data-mode="practice">
+                <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 9 0 0118 0z"/></svg>
+                即時練習
+              </button>
+              <button class="mode-btn" id="btn-exam-mode" data-mode="exam">
+                <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 9 0 0118 0z"/></svg>
+                全真模擬
+              </button>
+              <button class="mode-btn" id="btn-wrong-mode" data-mode="wrong">
+                <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+                錯題複習 (<span id="wrong-count-badge">0</span>)
+              </button>
+            </div>
+
+            <button class="icon-btn" id="btn-toggle-grid" title="開啟題目導航面板">
+              <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+            </button>
+
+            <button id="exam-back-to-hub-btn" class="btn btn-sm btn-secondary back-to-hub-btn" title="返回主畫面工具與任務中心">
+              &larr; 返回工具總覽
+            </button>
+          </div>
+        </header>
+
+        <!-- Main Content Grid -->
+        <main class="main-layout">
+          <!-- Left Sidebar / Drawer -->
+          <aside class="sidebar glass-panel" id="sidebar-drawer">
+            <div class="sidebar-header">
+              <h3>題目導航面板</h3>
+              <button class="close-sidebar-btn" id="btn-close-sidebar">&times;</button>
+            </div>
+
+            <div class="filter-box">
+              <label for="topic-filter">主題領域篩選</label>
+              <select id="topic-filter" class="custom-select">
+                <option value="ALL">全部主題 (All Topics)</option>
+              </select>
+            </div>
+
+            <div class="range-filter-box">
+              <label>自訂題號範圍</label>
+              <div class="range-inputs">
+                <input type="number" id="range-start" min="1" max="182" value="1" placeholder="起始">
+                <span class="range-separator">~</span>
+                <input type="number" id="range-end" min="1" max="182" value="182" placeholder="結束">
+                <button id="btn-apply-range" class="range-apply-btn" title="套用題號範圍">套用</button>
+              </div>
+            </div>
+
+            <div class="shuffle-toggle-box">
+              <label class="switch-label">
+                <input type="checkbox" id="chk-shuffle-q">
+                <span class="slider"></span>
+                <span class="label-text">隨機打亂題目順序</span>
+              </label>
+              <label class="switch-label">
+                <input type="checkbox" id="chk-shuffle-opt">
+                <span class="slider"></span>
+                <span class="label-text">隨機打亂選項順序</span>
+              </label>
+            </div>
+
+            <div class="quiz-stats-summary">
+              <div class="stat-pill correct-pill">
+                <span class="stat-num" id="stat-correct">0</span>
+                <span class="stat-label">正確</span>
+              </div>
+              <div class="stat-pill incorrect-pill">
+                <span class="stat-num" id="stat-incorrect">0</span>
+                <span class="stat-label">錯誤</span>
+              </div>
+              <div class="stat-pill pending-pill">
+                <span class="stat-num" id="stat-unanswered">0</span>
+                <span class="stat-label">未答</span>
+              </div>
+            </div>
+
+            <div class="question-grid-container">
+              <div class="grid-legend">
+                <span><i class="dot current"></i> 當前</span>
+                <span><i class="dot correct"></i> 答對</span>
+                <span><i class="dot incorrect"></i> 答錯</span>
+                <span><i class="dot unanswered"></i> 未答</span>
+              </div>
+              <div class="question-grid" id="question-grid">
+                <!-- Dynamic grid items generated via JS -->
+              </div>
+            </div>
+
+            <button class="reset-btn" id="btn-reset-quiz">
+              <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+              重新開始測驗
+            </button>
+          </aside>
+
+          <!-- Center Quiz Stage -->
+          <section class="quiz-stage">
+            <!-- Progress Bar -->
+            <div class="progress-bar-container glass-panel">
+              <div class="progress-info">
+                <span id="progress-text">載入題庫中...</span>
+                <span id="progress-percent">0%</span>
+              </div>
+              <div class="progress-track">
+                <div class="progress-fill" id="progress-fill" style="width: 0%"></div>
+              </div>
+            </div>
+
+            <!-- Question Card -->
+            <div class="question-card glass-panel" id="question-card">
+              <div class="card-meta">
+                <span class="topic-tag" id="q-topic">Agent Architecture</span>
+                <span class="qtype-tag" id="q-type">Single Choice</span>
+                <span class="qid-tag" id="q-id">Q1</span>
+              </div>
+
+              <!-- Question Body with Title and Optional Case Study -->
+              <div class="question-body">
+                <div id="q-case-study" class="case-study-box hidden">
+                  <!-- Dynamically populated if question belongs to a Case Study -->
+                </div>
+                <h2 class="question-title" id="q-title">載入題目中...</h2>
+              </div>
+
+              <!-- Interactive Options Container -->
+              <div class="interactive-area">
+                <h4>請選擇您的答案：</h4>
+                <div class="options-group" id="options-group">
+                  <!-- Dynamic Option Buttons generated via JS -->
+                </div>
+              </div>
+
+              <!-- Action Bar -->
+              <div class="action-bar">
+                <button class="nav-btn" id="btn-prev-q">
+                  <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+                  上一題
+                </button>
+
+                <button class="primary-btn" id="btn-check-answer">
+                  <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                  即時對答案
+                </button>
+
+                <button class="nav-btn" id="btn-next-q">
+                  下一題
+                  <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                </button>
+              </div>
+
+              <!-- Explanation Panel (Hidden by default, shown after check) -->
+              <div class="explanation-panel hidden" id="explanation-panel">
+                <div class="exp-header">
+                  <div class="exp-title-group">
+                    <span class="exp-icon" id="exp-status-icon">✓</span>
+                    <h3 id="exp-status-title">解答正確 (Correct)</h3>
+                  </div>
+                  <span class="correct-answer-label" id="exp-correct-answer-text">正確答案</span>
+                </div>
+                <div class="exp-body">
+                  <h4>官方技術解析 (Official Explanation)：</h4>
+                  <p id="exp-text">The explanation will appear here...</p>
+                </div>
+              </div>
+            </div>
+          </section>
+        </main>
+      </div>
+    </div>
+  </div>
+
+  <!-- 模擬考結算成績單 Modal -->
+  <div id="exam-result-modal" class="modal-backdrop hidden">
+    <div class="modal-dialog modal-exam-result">
+      <div class="modal-header">
+        <div>
+          <h3 class="modal-title">🎯 模擬測驗結算成績單</h3>
+          <p class="modal-subtitle">各主題領域掌握度與正誤分析</p>
+        </div>
+        <button id="exam-close-result-modal-btn" class="icon-btn close-btn">&times;</button>
+      </div>
+
+      <div class="modal-body">
+        <div class="score-hero">
+          <div class="score-circle">
+            <span class="score-big" id="exam-result-score-text">85%</span>
+            <span class="score-label">正確率</span>
+          </div>
+          <div class="score-status-box">
+            <span id="exam-result-pass-badge" class="status-badge status-operational">通過合格</span>
+            <p id="exam-result-summary-text" class="score-summary-p">共作答 50 題，答對 42 題，答錯 8 題</p>
+          </div>
+        </div>
+
+        <div class="topic-breakdown-section">
+          <h4 class="section-title">各主題領域分析 (Topic Breakdown)</h4>
+          <div id="exam-result-topic-breakdown" class="topic-breakdown-list"></div>
+        </div>
+      </div>
+    </div>
   </div>
 
   <!-- 任務執行輸入表單 Modal -->
-  <div id="task-modal" class="modal-backdrop">
+  <div id="task-modal" class="modal-backdrop hidden">
     <div class="modal-dialog">
       <div class="modal-header">
         <div>
@@ -422,39 +670,37 @@
 
         <div id="task-result-box" class="result-box hidden">
           <div class="result-box-header">
-            <span id="result-status-badge" class="badge">執行結果</span>
-            <span id="result-time" class="text-muted"></span>
+            <span class="result-title">執行成果</span>
+            <span id="result-status-badge" class="status-badge"></span>
+            <span id="result-time" class="result-time"></span>
           </div>
-          <pre id="result-json-output" class="json-code"></pre>
+          <pre id="result-json-output" class="result-pre"></pre>
           <div id="result-screenshot-wrapper" class="screenshot-wrapper hidden">
-            <h4>產出畫面快照</h4>
-            <img id="result-screenshot-img" src="" alt="任務截圖">
+            <h4>快照預覽:</h4>
+            <img id="result-screenshot-img" src="" alt="快照">
           </div>
         </div>
       </div>
 
       <div class="modal-footer">
-        <button id="modal-cancel-btn" class="btn btn-ghost">關閉</button>
-        <button id="modal-submit-btn" class="btn btn-primary">
-          <span class="btn-spinner hidden"></span>
-          <span class="btn-text">立即執行任務</span>
-        </button>
+        <button id="cancel-task-btn" class="btn btn-secondary">取消</button>
+        <button id="submit-task-btn" class="btn btn-primary">確認執行</button>
       </div>
     </div>
   </div>
 
-  <!-- all_log_config.js 檢視 Modal -->
-  <div id="config-modal" class="modal-backdrop">
+  <!-- 日誌配置 Modal -->
+  <div id="config-modal" class="modal-backdrop hidden">
     <div class="modal-dialog">
       <div class="modal-header">
         <div>
-          <h3 class="modal-title">操作日誌配置設定</h3>
-          <p class="modal-subtitle">路徑: logs/operations/all_log_config.js</p>
+          <h3 class="modal-title">操作日誌配置</h3>
+          <p class="modal-subtitle">讀取自 logs/operations/all_log_config.js</p>
         </div>
         <button id="close-config-modal-btn" class="icon-btn close-btn">&times;</button>
       </div>
       <div class="modal-body">
-        <pre id="config-json-output" class="json-code js-code"></pre>
+        <pre id="config-json-output" class="config-pre"></pre>
       </div>
       <div class="modal-footer">
         <button id="config-modal-close-btn" class="btn btn-secondary">關閉</button>
@@ -462,11 +708,10 @@
     </div>
   </div>
 
-  <!-- 載入 D3.js 力導向圖形庫 -->
+  <!-- 引入前端腳本 (依賴層優先) -->
   <script src="/static/vendor/d3.min.js"></script>
-  <!-- 載入代碼星雲圖模組 -->
   <script src="/static/js/nebula.js"></script>
-  <!-- 載入控制台主應用程式 -->
+  <script src="/static/js/exam.js"></script>
   <script src="/static/js/app.js"></script>
 </body>
 </html>

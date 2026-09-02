@@ -11,7 +11,7 @@ async def test_dashboard_route_serves_html():
     async with AsyncClient(transport=transport, base_url="http://test") as client:
         response = await client.get("/")
         assert response.status_code == 200
-        assert "Playwright Daemon" in response.text
+        assert "Playwright" in response.text
         assert "task-modal" in response.text
 
 

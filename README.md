@@ -50,26 +50,37 @@ d:\Agent\Tools\Playwright/
 │   └── builtin/                  # 內建任務插件目錄 (純淨基底，等待依需求逐步添加任務)
 │       └── __init__.py
 │
-├── tools/                        # 🛠️ 輔助開發工具生態系
+├── tools/                        # 🛠️ 輔助開發與生產力工具生態系
 │   ├── __init__.py
-│   └── code_nebula/              # 🌌 代碼星雲圖 (專案全域架構與呼叫關聯可視化引擎)
+│   ├── code_nebula/              # 🌌 代碼星雲圖 (專案全域架構與呼叫關聯可視化引擎)
+│   │   ├── __init__.py
+│   │   ├── models.py             # 符號與邊緣關係 Pydantic 資料模型
+│   │   ├── analyzer.py           # AST 抽象語法樹靜態分析器
+│   │   └── graph.py              # CodeGraphEngine 知識圖譜與多層級 BFS 裁剪
+│   └── exam_simulator/           # 🎯 模擬測驗系統 (可插拔式題庫管理與評分引擎)
 │       ├── __init__.py
-│       ├── models.py             # 符號與邊緣關係 Pydantic 資料模型
-│       ├── analyzer.py           # AST 抽象語法樹靜態分析器
-│       └── graph.py              # CodeGraphEngine 知識圖譜與多層級 BFS 裁剪
+│       ├── models.py             # 題目、選項、下拉選單與成績單 Pydantic 模型
+│       ├── manager.py            # ExamBankManager 動態探索、作答評分與錯題本管理
+│       └── data/                 # 💾 題庫資料與持久化進度集中區
+│           ├── question_banks/   # 📚 可插拔式題庫目錄
+│           │   ├── README.md     # [題庫規格書] 欄位定義、題型範例與 AI 提示詞模板
+│           │   └── ai-103.json   # Microsoft Azure AI-103 題庫 (182 題)
+│           └── exam_progress.json# 歷史測驗記錄與各科目錯題本持久化檔案
 │
 ├── api/                          # 🌐 HTTP REST API 服務介面
 │   ├── __init__.py
 │   ├── routes.py                 # 核心路由定義 (/health, /api/v1/tasks)
 │   ├── nebula_routes.py          # 星雲圖路由 (/api/v1/nebula/scan, /graph, /code)
+│   ├── exam_routes.py            # 模擬測驗路由 (/api/v1/exam/banks, /questions, /submit)
 │   └── schemas.py                # 請求與響應 Pydantic 資料結構定義
 │
-├── web/                          # 🖥️ Web 控制台與星雲視覺化前端
-│   ├── index.html                # 控制台雙視圖單頁儀表板 (SPA)
+├── web/                          # 🖥️ Web 控制台、星雲視覺化與測驗前端
+│   ├── index.html                # 整合型工具中心單頁儀表板 (SPA)
 │   └── static/                   # 靜態資源目錄
 │       ├── css/style.css         # 現代深色玻璃擬態樣式表
-│       ├── js/app.js             # 主控制台與分頁切換邏輯
+│       ├── js/app.js             # 主控制台與工作區路由邏輯
 │       ├── js/nebula.js          # D3.js 力導向星雲圖渲染與代碼自省
+│       ├── js/exam.js            # 模擬測驗作答互動、計時與成績單引擎
 │       └── vendor/d3.min.js      # 輕量 D3.js v7 圖形物理庫
 │
 ├── tests/                        # 🧪 自動化測試套件 (持續整合品質保證)
@@ -80,7 +91,8 @@ d:\Agent\Tools\Playwright/
 │   ├── test_browser_lifecycle.py # 瀏覽器沙盒隔離與錯誤保護測試
 │   ├── test_op_logger.py         # 操作審計日誌與 30 天過期清理測試
 │   ├── test_web_ui.py            # Web 控制台與 WebSocket 串流測試
-│   └── test_code_nebula.py       # 代碼星雲圖 AST 分析與 BFS 子圖測試
+│   ├── test_code_nebula.py       # 代碼星雲圖 AST 分析與 BFS 子圖測試
+│   └── test_exam_simulator.py    # 模擬測驗題庫動態掃描與評分測試
 │
 ├── logs/                         # 📝 系統與模組日誌集中目錄
 │   ├── operations/               # 🎯 專案操作總紀錄

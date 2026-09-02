@@ -59,6 +59,29 @@
   };
 
   /* ==========================================================================
+     工作區路由與導航管理 (Workspace Router)
+     ========================================================================== */
+  const AppRouter = {
+    showMainHub() {
+      document.querySelectorAll('.view-container').forEach((v) => v.classList.remove('active'));
+      document.getElementById('view-dashboard-container')?.classList.add('active');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    },
+    showNebula() {
+      document.querySelectorAll('.view-container').forEach((v) => v.classList.remove('active'));
+      document.getElementById('view-nebula-container')?.classList.add('active');
+      if (window.NebulaApp) window.NebulaApp.handleResize();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    },
+    showExam() {
+      document.querySelectorAll('.view-container').forEach((v) => v.classList.remove('active'));
+      document.getElementById('view-exam-container')?.classList.add('active');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    },
+  };
+  window.AppRouter = AppRouter;
+
+  /* ==========================================================================
      初始化與事件綁定
      ========================================================================== */
   function init() {
@@ -74,22 +97,19 @@
       elements.apiKeyInput.type = type;
     });
 
-    // 視圖切換 (Dashboard vs Nebula)
-    document.querySelectorAll('.nav-tab').forEach((tab) => {
-      tab.addEventListener('click', (e) => {
-        const targetView = e.currentTarget.dataset.view;
-        document.querySelectorAll('.nav-tab').forEach((t) => t.classList.remove('active'));
-        document.querySelectorAll('.view-container').forEach((v) => v.classList.remove('active'));
-
-        e.currentTarget.classList.add('active');
-        const targetContainer = document.getElementById(`view-${targetView}-container`);
-        if (targetContainer) targetContainer.classList.add('active');
-
-        if (targetView === 'nebula' && window.NebulaApp) {
-          window.NebulaApp.handleResize();
-        }
-      });
+    // 主畫面工具選單卡片點擊導航
+    document.getElementById('btn-enter-nebula')?.addEventListener('click', () => AppRouter.showNebula());
+    document.getElementById('open-tool-nebula-card')?.addEventListener('click', (e) => {
+      if (e.target.tagName !== 'BUTTON') AppRouter.showNebula();
     });
+
+    document.getElementById('btn-enter-exam')?.addEventListener('click', () => AppRouter.showExam());
+    document.getElementById('open-tool-exam-card')?.addEventListener('click', (e) => {
+      if (e.target.tagName !== 'BUTTON') AppRouter.showExam();
+    });
+
+    document.getElementById('nebula-back-to-hub-btn')?.addEventListener('click', () => AppRouter.showMainHub());
+    document.getElementById('exam-back-to-hub-btn')?.addEventListener('click', () => AppRouter.showMainHub());
 
     // 重新整理
     elements.refreshBtn.addEventListener('click', () => {
@@ -100,14 +120,16 @@
     elements.reloadTasksBtn.addEventListener('click', fetchTasks);
 
     // 終端機日誌控制
-    elements.autoscrollChk.addEventListener('change', (e) => {
+    elements.autoscrollChk?.addEventListener('change', (e) => {
       state.autoScroll = e.target.checked;
     });
 
     elements.clearLogsBtn.addEventListener('click', () => {
-      elements.terminalBody.innerHTML = '<div class="terminal-line system-line">[日誌已清空] 等待新事件...</div>';
+      const terminalEl = document.getElementById('log-terminal');
+      if (terminalEl) {
+        terminalEl.innerHTML = '<div class="terminal-empty-hint">日誌已清空，等待新事件...</div>';
+      }
       state.logCount = 0;
-      updateLogCountText();
     });
 
     // 日誌過濾器
@@ -122,8 +144,8 @@
 
     // Modal 關閉
     elements.closeModalBtn.addEventListener('click', closeTaskModal);
-    elements.modalCancelBtn.addEventListener('click', closeTaskModal);
-    elements.modalSubmitBtn.addEventListener('click', submitTaskExecution);
+    elements.modalCancelBtn?.addEventListener('click', closeTaskModal);
+    elements.modalSubmitBtn?.addEventListener('click', submitTaskExecution);
 
     elements.viewConfigBtn.addEventListener('click', openConfigModal);
     elements.closeConfigModalBtn.addEventListener('click', closeConfigModal);
@@ -135,14 +157,17 @@
       if (e.target === elements.configModal) closeConfigModal();
     });
 
-    // 啟動首次檢查與 WebSocket 連線 (不再於背景盲目高頻輪詢)
+    // 啟動首次檢查與 WebSocket 連線
     fetchHealth();
     fetchTasks();
     initWebSocket();
 
-    // 啟動代碼星雲圖模組
+    // 啟動各獨立工具子模組
     if (window.NebulaApp) {
       window.NebulaApp.init();
+    }
+    if (window.ExamApp) {
+      window.ExamApp.init();
     }
   }
 
