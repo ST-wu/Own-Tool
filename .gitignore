@@ -24,8 +24,14 @@ artifacts/
 # Testing & Cache
 .pytest_cache/
 
-# Agent Session Backups
+# Agent Session Backups & Temporary Files
 .agents/backups/
+*.bak
+*.tmp
+scratch/
+
+# Local User Downloads (LAN FastDrop)
+downloads/
 
 # Operating System Files
 .DS_Store

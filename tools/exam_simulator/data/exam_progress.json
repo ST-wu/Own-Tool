@@ -385,6 +385,24 @@
         "correct": 1,
         "is_passed": true,
         "time_spent_seconds": 30
+      },
+      {
+        "timestamp": 1788515076.9522038,
+        "mode": "exam",
+        "score_pct": 50.0,
+        "total": 2,
+        "correct": 1,
+        "is_passed": false,
+        "time_spent_seconds": 60
+      },
+      {
+        "timestamp": 1788515076.9859424,
+        "mode": "practice",
+        "score_pct": 100.0,
+        "total": 1,
+        "correct": 1,
+        "is_passed": true,
+        "time_spent_seconds": 30
       }
     ]
   }

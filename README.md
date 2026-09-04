@@ -66,11 +66,16 @@ d:\Agent\Tools\Playwright/
 │   │       │   ├── README.md     # [題庫規格書] 欄位定義、題型範例與 AI 提示詞模板
 │   │       │   └── ai-103.json   # Microsoft Azure AI-103 題庫 (182 題)
 │   │       └── exam_progress.json# 歷史測驗記錄與各科目錯題本持久化檔案
-│   └── lan_drop/                 # 📲 區網快速轉檔 (局域網雙向檔案直傳與網址安全傳遞)
+│   ├── lan_drop/                 # 📲 區網快速轉檔 (局域網雙向檔案直傳與網址安全傳遞)
+│   │   ├── __init__.py
+│   │   ├── models.py             # Session, File, URL, Device Pydantic 模型
+│   │   ├── security.py           # 私有 IP 白名單、路徑穿越防護與 URL 安全沙盒
+│   │   └── manager.py            # LanDropManager 配對、Downloads 儲存與 WebSocket 廣播
+│   └── smart_clipboard/         # 📋 智慧剪貼簿進階管家 (先進先出 FIFO、自動步進與零殘留銷毀)
 │       ├── __init__.py
-│       ├── models.py             # Session, File, URL, Device Pydantic 模型
-│       ├── security.py           # 私有 IP 白名單、路徑穿越防護與 URL 安全沙盒
-│       └── manager.py            # LanDropManager 配對、Downloads 儲存與 WebSocket 廣播
+│       ├── models.py             # ClipItem, ClipboardMode, ClipboardConfig 模型
+│       ├── windows_clipboard.py  # Win32 user32/kernel32 剪貼簿與按鍵偵測
+│       └── manager.py            # SmartClipboardManager FIFO 佇列與正緣 Ctrl+V 監聽
 │
 ├── api/                          # 🌐 HTTP REST API 服務介面
 │   ├── __init__.py
@@ -78,6 +83,7 @@ d:\Agent\Tools\Playwright/
 │   ├── nebula_routes.py          # 星雲圖路由 (/api/v1/nebula/scan, /graph, /code)
 │   ├── exam_routes.py            # 模擬測驗路由 (/api/v1/exam/banks, /questions, /submit)
 │   ├── lan_drop_routes.py        # 區網轉檔路由 (/api/v1/drop/status, /pair, /upload, /url/send, /ws)
+│   ├── clipboard_routes.py       # 智慧剪貼簿路由 (/api/v1/clipboard/state, /toggle, /clear, /ws)
 │   └── schemas.py                # 請求與響應 Pydantic 資料結構定義
 │
 ├── web/                          # 🖥️ Web 控制台、星雲視覺化與測驗前端
@@ -89,6 +95,7 @@ d:\Agent\Tools\Playwright/
 │       ├── js/nebula.js          # D3.js 力導向星雲圖渲染與代碼自省
 │       ├── js/exam.js            # 模擬測驗作答互動、計時與成績單引擎
 │       ├── js/lan_drop.js        # 區網快速轉檔電腦端互動邏輯
+│       ├── js/clipboard.js       # 智慧剪貼簿前端狀態渲染與 WebSocket 同步
 │       └── vendor/d3.min.js      # 輕量 D3.js v7 圖形物理庫
 │
 ├── tests/                        # 🧪 自動化測試套件 (持續整合品質保證)
@@ -101,7 +108,8 @@ d:\Agent\Tools\Playwright/
 │   ├── test_web_ui.py            # Web 控制台與 WebSocket 串流測試
 │   ├── test_code_nebula.py       # 代碼星雲圖 AST 分析與 BFS 子圖測試
 │   ├── test_exam_simulator.py    # 模擬測驗題庫動態掃描與評分測試
-│   └── test_lan_drop.py          # 區網快速轉檔安全性、傳輸與配對測試
+│   ├── test_lan_drop.py          # 區網快速轉檔安全性、傳輸與配對測試
+│   └── test_smart_clipboard.py   # 剪貼簿管家 FIFO、正緣步進、防爆上限與原子銷毀測試
 │
 ├── logs/                         # 📝 系統與模組日誌集中目錄
 │   ├── operations/               # 🎯 專案操作總紀錄
@@ -145,6 +153,13 @@ uv run python main.py
 - **🖥️ Web 控制台儀表板**：開啟瀏覽器訪問 `http://127.0.0.1:8000/`：
   - **任務控制台**：即時監控系統狀態、動態填表執行任務、查閱 WebSocket 彩色操作審計日誌。
   - **代碼星雲圖 (Code Nebula)**：輸入任意函數/類別名稱，即時以其為中心展開 1~5 層深度的呼叫關聯星雲圖，點擊節點可直接查看原始碼與上下游依賴！
+  - **模擬測驗系統 (Exam Simulator)**：可插拔式題庫管理、沉浸式計時作答與自動評分錯題本。
+  - **區網快速轉檔 (LAN FastDrop)**：局域網多設備配對免登入、雙向檔案直傳與安全網址推送。
+  - **智慧剪貼簿進階管家 (Smart Clipboard)**：
+    - **先進先出 (FIFO) 批次搬運**：複製多筆後依序先進先出貼上，徹底消除反序錯亂。
+    - **貼上 (Ctrl+V) 正緣自動步進**：以 25ms 極低延遲靈敏跳號，支援高速連按貼上。
+    - **鎖定重複模式 (Locked Mode)**：同一卡片內容鎖定反覆貼上不跳號。
+    - **零殘留銷毀 (Zero-Waste)**：關閉開關立即終止線程並原子清空記憶體佇列，保證隱私安全。
 - **📖 Swagger API 文件**：可於瀏覽器開啟 `http://127.0.0.1:8000/docs` 進行標準 REST API 調試。
 
 ### 5. CLI 單次執行模式 (免開 API 服務直接除錯)
