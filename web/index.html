@@ -102,6 +102,36 @@
               <button class="btn btn-sm btn-primary" id="btn-enter-exam">開啟測驗系統 &rarr;</button>
             </div>
           </div>
+
+          <!-- 工具卡片 3：區網快速轉檔 -->
+          <div class="tool-feature-card" id="open-tool-drop-card">
+            <div class="tool-card-glow emerald"></div>
+            <div class="tool-card-header">
+              <div class="tool-icon-wrapper emerald">📲</div>
+              <span class="tool-status-pill">100% 局域網直連</span>
+            </div>
+            <h3 class="tool-card-title">區網快速轉檔 (LAN FastDrop)</h3>
+            <p class="tool-card-desc">手機掃描 QR Code 免安裝即時配對，支援電腦與手機雙向檔案/圖片直傳至 Downloads，與網址安全自動開啟。</p>
+            <div class="tool-card-footer">
+              <span class="tool-meta-text">端對端安全驗證 • 零雲端中轉</span>
+              <button class="btn btn-sm btn-primary" id="btn-enter-drop">開啟快速轉檔 &rarr;</button>
+            </div>
+          </div>
+
+          <!-- 工具卡片 4：智慧剪貼簿進階管家 -->
+          <div class="tool-feature-card" id="open-tool-clipboard-card">
+            <div class="tool-card-glow amber"></div>
+            <div class="tool-card-header">
+              <div class="tool-icon-wrapper amber">📋</div>
+              <span class="tool-status-pill">防爆佇列 • 零殘留</span>
+            </div>
+            <h3 class="tool-card-title">智慧剪貼簿進階管家 (Smart Clipboard)</h3>
+            <p class="tool-card-desc">多格依序剪下、佇列指標貼上。支援同一內容重複貼上、防爆上限過濾，關閉後 100% 物理銷毀零殘留。</p>
+            <div class="tool-card-footer">
+              <span class="tool-meta-text" id="clipboard-hub-meta-text">狀態: 閒置已關閉</span>
+              <button class="btn btn-sm btn-primary" id="btn-enter-clipboard">開啟剪貼簿 &rarr;</button>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -621,6 +651,266 @@
     </div>
   </div>
 
+  <!-- =========================================================================
+       視圖 4：區網快速轉檔 (LAN FastDrop Workspace)
+       ========================================================================= -->
+  <div id="view-drop-container" class="view-container">
+    <div class="drop-workspace-wrapper">
+      <!-- 頂部工作區導航 -->
+      <header class="workspace-nav-bar">
+        <div class="workspace-title-group">
+          <span class="workspace-pill emerald">LAN DROP</span>
+          <h2 class="workspace-title">區網快速轉檔 (LAN FastDrop)</h2>
+        </div>
+        <div class="workspace-actions">
+          <button class="btn btn-sm btn-secondary" id="drop-back-to-hub-btn">
+            &larr; 返回工具總覽
+          </button>
+        </div>
+      </header>
+
+      <!-- 主操作分割佈局 -->
+      <div class="drop-main-layout">
+        <!-- 左側：連線雷達與配對面板 -->
+        <div class="drop-radar-panel">
+          <div class="radar-header">
+            <h3>📲 手機掃碼極速連線</h3>
+            <div id="drop-status-badge" class="drop-status-badge">
+              <span class="drop-status-dot"></span>
+              <span id="drop-status-text">等待配對</span>
+            </div>
+          </div>
+
+          <!-- QR Code 與配對資訊 -->
+          <div class="qr-code-box" id="drop-qr-code-box">
+            <!-- 2 分鐘時效倒數警示 -->
+            <div id="drop-timer-badge" class="drop-timer-badge">
+              <span class="timer-icon">⏱️</span>
+              <span>有效期限: </span>
+              <strong id="drop-countdown-text">02:00</strong>
+            </div>
+
+            <div class="qr-view-wrapper">
+              <img id="drop-qr-img" src="" alt="配對 QR Code" class="qr-image" />
+              <!-- 過期遮罩層 (主動銷毀舊碼防護) -->
+              <div id="drop-qr-expired-overlay" class="qr-expired-overlay" style="display: none;">
+                <div class="expired-icon">⏳</div>
+                <div class="expired-title">金鑰已過期失效</div>
+                <div class="expired-desc">舊 QR Code 與 PIN 碼已安全銷毀</div>
+                <button id="btn-regen-expired" class="btn btn-sm btn-primary">重新生成金鑰</button>
+              </div>
+            </div>
+
+            <div class="qr-info-group">
+              <span class="qr-hint-text">使用手機相機掃描 QR Code 或造訪：</span>
+              <a id="drop-lan-url" href="#" target="_blank" class="lan-url-link">http://.../drop</a>
+              <div class="pin-code-badge" id="drop-pin-code-badge">
+                備用 PIN 碼: <strong id="drop-pin-code">------</strong>
+              </div>
+            </div>
+          </div>
+
+          <!-- 儲存目錄提示 -->
+          <div class="storage-location-box">
+            <div class="storage-header">
+              <svg width="16" height="16" fill="none" stroke="#10b981" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"/></svg>
+              <span>手機傳入檔案預設存放目錄：</span>
+            </div>
+            <code id="drop-downloads-path" class="downloads-path-code">~/Downloads</code>
+          </div>
+
+          <button id="btn-new-drop-session" class="btn btn-secondary btn-block">
+            🔄 重新生成配對金鑰與 QR Code
+          </button>
+        </div>
+
+        <!-- 右側：雙向檔案與網址傳遞工作區 -->
+        <div class="drop-stage-panel">
+          <!-- 電腦 ➔ 手機 傳送區 -->
+          <div class="drop-section-card">
+            <div class="section-card-header">
+              <div class="header-left">
+                <span class="icon-circle blue">📤</span>
+                <h4>電腦傳送至手機 (Drag & Drop to Phone)</h4>
+              </div>
+            </div>
+
+            <input type="file" id="desktop-file-input" multiple style="display: none;" />
+            <div class="desktop-drop-zone" id="desktop-drop-zone">
+              <svg width="36" height="36" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/></svg>
+              <div class="drop-prompt-text">
+                <strong>拖曳圖片或檔案至此</strong>，或點擊選取檔案
+              </div>
+              <span class="drop-sub-text">手機配對後將即時跳出下載通知</span>
+            </div>
+
+            <div class="desktop-upload-progress" id="desktop-upload-progress" style="display: none;">
+              <div class="progress-track"><div class="progress-fill" id="desktop-progress-fill"></div></div>
+              <span class="progress-text" id="desktop-progress-text">傳送中...</span>
+            </div>
+
+            <!-- 網址傳遞區 -->
+            <div class="url-transfer-subgroup">
+              <label>🔗 發送網址至手機：</label>
+              <div class="url-input-wrap">
+                <input type="url" id="desktop-url-input" class="form-input" placeholder="貼上 https:// 網址發送給手機..." />
+                <button id="btn-desktop-send-url" class="btn btn-primary">發送至手機</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- 手機 ➔ 電腦 接收紀錄區 -->
+          <div class="drop-section-card feed-card">
+            <div class="section-card-header">
+              <div class="header-left">
+                <span class="icon-circle green">📥</span>
+                <h4>接收紀錄與手機檔案 (Received from Mobile)</h4>
+              </div>
+            </div>
+
+            <div class="transfers-history-feed" id="drop-received-files-list">
+              <div class="empty-state-text">
+                尚未收到手機檔案，手機拍照或選檔後將秒速直傳至您的 Downloads 目錄。
+              </div>
+            </div>
+          </div>
+
+          <!-- 網址同步紀錄區 -->
+          <div class="drop-section-card feed-card">
+            <div class="section-card-header">
+              <div class="header-left">
+                <span class="icon-circle purple">🌐</span>
+                <h4>網址雙向傳遞與安全開啟紀錄 (URL Safe Beam)</h4>
+              </div>
+            </div>
+
+            <div class="transfers-history-feed" id="drop-url-history-list">
+              <div class="empty-state-text">
+                尚未有網址傳遞紀錄。
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       視圖 4：智慧剪貼簿進階管家 (Smart Clipboard Workspace)
+       ========================================================================= -->
+  <div id="view-clipboard-container" class="view-container">
+    <div class="clipboard-layout">
+      <!-- 頂部導航列 -->
+      <div class="workspace-nav-bar">
+        <button id="clipboard-back-to-hub-btn" class="btn btn-sm btn-secondary back-to-hub-btn">
+          &larr; 返回工具總覽首頁
+        </button>
+        <div class="workspace-title-group">
+          <span class="workspace-pill amber">📋 效率工具</span>
+          <h2 class="workspace-title">智慧剪貼簿進階管家 (Smart Clipboard)</h2>
+        </div>
+        <div class="clipboard-top-status">
+          <span id="clipboard-pulse-pill" class="status-pill offline">
+            <span class="status-dot"></span>
+            <span id="clipboard-pulse-text">未啟用 (已清空銷毀)</span>
+          </span>
+        </div>
+      </div>
+
+      <!-- 主控開關與狀態指揮艙 -->
+      <div class="clipboard-master-bar">
+        <div class="master-switch-card">
+          <div class="switch-info">
+            <div class="switch-title-row">
+              <span class="switch-title">隊列監聽總開關</span>
+              <span class="zero-waste-badge">🛡️ 零殘留保護</span>
+            </div>
+            <p class="switch-desc">開啟時開始依序捕獲複製項目；關閉時立即停止監聽並徹底銷毀記憶體卡片。</p>
+          </div>
+          <div class="switch-action-area">
+            <label class="master-toggle-switch">
+              <input type="checkbox" id="chk-clipboard-master-toggle">
+              <span class="slider round"></span>
+            </label>
+            <span id="clipboard-toggle-label" class="toggle-state-text">OFF (關閉)</span>
+          </div>
+        </div>
+
+        <!-- 模式與快捷操作列 -->
+        <div class="clipboard-actions-bar">
+          <div class="mode-chips-group">
+            <span class="control-label">運作模式:</span>
+            <button class="mode-chip active" data-mode="auto_advance" id="btn-mode-auto-advance" title="自動步進：先進先出依序貼上，每按一次 Ctrl+V 貼上後自動跳至下一項">
+              🟢 自動步進 (FIFO 模式)
+            </button>
+            <button class="mode-chip" data-mode="locked" id="btn-mode-locked" title="鎖定重複：貼上不跳號，當前內容鎖定供反覆多次貼上">
+              🔒 鎖定重複 (Locked 模式)
+            </button>
+          </div>
+
+          <div class="quick-controls-group">
+            <button id="btn-clipboard-clear" class="btn btn-sm btn-danger" title="立即清空銷毀所有卡片">
+              🗑️ 清空佇列 (Purge)
+            </button>
+          </div>
+        </div>
+
+        <!-- 容量與防爆設定列 -->
+        <div class="clipboard-config-bar">
+          <div class="config-item">
+            <span class="config-label">容量上限:</span>
+            <select id="sel-clipboard-max-capacity" class="form-select-sm">
+              <option value="5">5 筆 (極簡)</option>
+              <option value="10">10 筆</option>
+              <option value="15" selected>15 筆 (標準推薦)</option>
+              <option value="20">20 筆</option>
+              <option value="30">30 筆 (大容量)</option>
+            </select>
+          </div>
+
+          <div class="config-item">
+            <label class="config-checkbox-label">
+              <input type="checkbox" id="chk-clipboard-ignore-dup" checked>
+              <span>忽略連續重複複製</span>
+            </label>
+          </div>
+
+          <div class="config-item">
+            <span class="config-label">閒置銷毀:</span>
+            <select id="sel-clipboard-auto-purge" class="form-select-sm">
+              <option value="10">10 分鐘無操作</option>
+              <option value="15" selected>15 分鐘無操作</option>
+              <option value="30">30 分鐘無操作</option>
+              <option value="0">手動關閉才銷毀</option>
+            </select>
+          </div>
+
+          <div class="config-counter-box">
+            <span class="counter-label">佇列容量:</span>
+            <span id="clipboard-counter-text" class="counter-value">0 / 15</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 剪貼簿卡片動態展示區 -->
+      <div class="clipboard-workspace-body">
+        <div class="cards-container-header">
+          <div class="cards-header-title">
+            <h3>📋 剪貼簿項目清單 (Clipboard Queue)</h3>
+            <span class="cards-header-hint" id="clipboard-queue-hint">點選任一卡片可直接設為當前貼上項目</span>
+          </div>
+          <div class="current-focus-badge" id="current-focus-badge" style="display: none;">
+            🎯 當前剪貼簿載入: <span id="current-focus-index">#1</span>
+          </div>
+        </div>
+
+        <div id="clipboard-cards-grid" class="clipboard-cards-grid">
+          <!-- 動態生成之卡片清單或空狀態 -->
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- 模擬考結算成績單 Modal -->
   <div id="exam-result-modal" class="modal-backdrop hidden">
     <div class="modal-dialog modal-exam-result">
@@ -712,6 +1002,8 @@
   <script src="/static/vendor/d3.min.js"></script>
   <script src="/static/js/nebula.js"></script>
   <script src="/static/js/exam.js"></script>
+  <script src="/static/js/lan_drop.js"></script>
+  <script src="/static/js/clipboard.js"></script>
   <script src="/static/js/app.js"></script>
 </body>
 </html>

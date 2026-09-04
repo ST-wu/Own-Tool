@@ -34,7 +34,7 @@
     reloadTasksBtn: document.getElementById('reload-tasks-btn'),
     wsIndicator: document.getElementById('ws-indicator'),
     wsStatusText: document.getElementById('ws-status-text'),
-    terminalBody: document.getElementById('terminal-body'),
+    terminalBody: document.getElementById('log-terminal') || document.getElementById('terminal-body'),
     logCountText: document.getElementById('log-count-text'),
     autoscrollChk: document.getElementById('autoscroll-chk'),
     clearLogsBtn: document.getElementById('clear-logs-btn'),
@@ -43,8 +43,8 @@
     modalTaskName: document.getElementById('modal-task-name'),
     modalTaskDesc: document.getElementById('modal-task-desc'),
     closeModalBtn: document.getElementById('close-modal-btn'),
-    modalCancelBtn: document.getElementById('modal-cancel-btn'),
-    modalSubmitBtn: document.getElementById('modal-submit-btn'),
+    modalCancelBtn: document.getElementById('cancel-task-btn') || document.getElementById('modal-cancel-btn'),
+    modalSubmitBtn: document.getElementById('submit-task-btn') || document.getElementById('modal-submit-btn'),
     dynamicFormFields: document.getElementById('dynamic-form-fields'),
     taskResultBox: document.getElementById('task-result-box'),
     resultStatusBadge: document.getElementById('result-status-badge'),
@@ -78,6 +78,18 @@
       document.getElementById('view-exam-container')?.classList.add('active');
       window.scrollTo({ top: 0, behavior: 'smooth' });
     },
+    showLanDrop() {
+      document.querySelectorAll('.view-container').forEach((v) => v.classList.remove('active'));
+      document.getElementById('view-drop-container')?.classList.add('active');
+      if (window.LanDropApp) window.LanDropApp.init();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    },
+    showClipboard() {
+      document.querySelectorAll('.view-container').forEach((v) => v.classList.remove('active'));
+      document.getElementById('view-clipboard-container')?.classList.add('active');
+      if (window.ClipboardApp) window.ClipboardApp.init();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    },
   };
   window.AppRouter = AppRouter;
 
@@ -98,18 +110,42 @@
     });
 
     // 主畫面工具選單卡片點擊導航
-    document.getElementById('btn-enter-nebula')?.addEventListener('click', () => AppRouter.showNebula());
+    document.getElementById('btn-enter-nebula')?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      AppRouter.showNebula();
+    });
     document.getElementById('open-tool-nebula-card')?.addEventListener('click', (e) => {
       if (e.target.tagName !== 'BUTTON') AppRouter.showNebula();
     });
 
-    document.getElementById('btn-enter-exam')?.addEventListener('click', () => AppRouter.showExam());
+    document.getElementById('btn-enter-exam')?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      AppRouter.showExam();
+    });
     document.getElementById('open-tool-exam-card')?.addEventListener('click', (e) => {
       if (e.target.tagName !== 'BUTTON') AppRouter.showExam();
     });
 
+    document.getElementById('btn-enter-drop')?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      AppRouter.showLanDrop();
+    });
+    document.getElementById('open-tool-drop-card')?.addEventListener('click', (e) => {
+      if (e.target.tagName !== 'BUTTON') AppRouter.showLanDrop();
+    });
+
+    document.getElementById('btn-enter-clipboard')?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      AppRouter.showClipboard();
+    });
+    document.getElementById('open-tool-clipboard-card')?.addEventListener('click', (e) => {
+      if (e.target.tagName !== 'BUTTON') AppRouter.showClipboard();
+    });
+
     document.getElementById('nebula-back-to-hub-btn')?.addEventListener('click', () => AppRouter.showMainHub());
     document.getElementById('exam-back-to-hub-btn')?.addEventListener('click', () => AppRouter.showMainHub());
+    document.getElementById('drop-back-to-hub-btn')?.addEventListener('click', () => AppRouter.showMainHub());
+    document.getElementById('clipboard-back-to-hub-btn')?.addEventListener('click', () => AppRouter.showMainHub());
 
     // 重新整理
     elements.refreshBtn.addEventListener('click', () => {
@@ -168,6 +204,9 @@
     }
     if (window.ExamApp) {
       window.ExamApp.init();
+    }
+    if (window.ClipboardApp) {
+      window.ClipboardApp.init();
     }
   }
 
@@ -497,6 +536,13 @@
     state.logCount++;
     updateLogCountText();
 
+    const targetEl = elements.terminalBody || document.getElementById('log-terminal');
+    if (!targetEl) return;
+
+    // 清空初始「等待伺服器操作日誌串流傳輸...」佔位提示
+    const emptyHint = targetEl.querySelector('.terminal-empty-hint');
+    if (emptyHint) emptyHint.remove();
+
     const lineDiv = document.createElement('div');
     lineDiv.className = 'terminal-line';
 
@@ -525,20 +571,22 @@
       lineDiv.style.display = 'none';
     }
 
-    elements.terminalBody.appendChild(lineDiv);
+    targetEl.appendChild(lineDiv);
 
     // 最大保留 1000 行
-    if (elements.terminalBody.childElementCount > 1000) {
-      elements.terminalBody.removeChild(elements.terminalBody.firstChild);
+    if (targetEl.childElementCount > 1000) {
+      targetEl.removeChild(targetEl.firstChild);
     }
 
     if (state.autoScroll) {
-      elements.terminalBody.scrollTop = elements.terminalBody.scrollHeight;
+      targetEl.scrollTop = targetEl.scrollHeight;
     }
   }
 
   function applyLogFilter() {
-    const lines = elements.terminalBody.querySelectorAll('.terminal-line');
+    const targetEl = elements.terminalBody || document.getElementById('log-terminal');
+    if (!targetEl) return;
+    const lines = targetEl.querySelectorAll('.terminal-line');
     lines.forEach((line) => {
       if (state.activeFilter === 'ALL' || line.dataset.level === state.activeFilter || line.classList.contains('system-line')) {
         line.style.display = 'block';
@@ -549,7 +597,9 @@
   }
 
   function updateLogCountText() {
-    elements.logCountText.textContent = `顯示 ${state.logCount} 筆紀錄`;
+    if (elements.logCountText) {
+      elements.logCountText.textContent = `顯示 ${state.logCount} 筆紀錄`;
+    }
   }
 
   /* ==========================================================================

@@ -1,0 +1,912 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>區網快速轉檔 (LAN FastDrop) - 手機端</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-base: #06080f;
+      --bg-panel: rgba(15, 23, 42, 0.85);
+      --border-glass: rgba(255, 255, 255, 0.1);
+      --color-primary: #0066ff;
+      --color-primary-glow: rgba(0, 102, 255, 0.35);
+      --color-cyan: #00d2ff;
+      --color-success: #10b981;
+      --color-danger: #ef4444;
+      --color-warning: #f59e0b;
+      --text-primary: #f8fafc;
+      --text-secondary: #94a3b8;
+      --radius-lg: 18px;
+      --radius-md: 12px;
+      --radius-sm: 8px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background-color: var(--bg-base);
+      background-image: 
+        radial-gradient(circle at 15% 15%, rgba(0, 102, 255, 0.15) 0%, transparent 45%),
+        radial-gradient(circle at 85% 85%, rgba(0, 210, 255, 0.1) 0%, transparent 45%);
+      color: var(--text-primary);
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      padding: 16px;
+    }
+
+    .app-container {
+      max-width: 480px;
+      margin: 0 auto;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      flex: 1;
+    }
+
+    /* 頂部狀態列 */
+    .mobile-header {
+      background: var(--bg-panel);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--border-glass);
+      border-radius: var(--radius-lg);
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo-box {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .logo-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: var(--radius-sm);
+      background: linear-gradient(135deg, var(--color-primary), var(--color-cyan));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 12px var(--color-primary-glow);
+    }
+
+    .logo-title h1 {
+      font-size: 16px;
+      font-weight: 800;
+      letter-spacing: -0.3px;
+    }
+
+    .logo-title span {
+      font-size: 10px;
+      color: var(--text-secondary);
+      display: block;
+    }
+
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 20px;
+      background: rgba(245, 158, 11, 0.15);
+      color: var(--color-warning);
+      border: 1px solid rgba(245, 158, 11, 0.3);
+      transition: all 0.3s ease;
+    }
+
+    .status-pill.connected {
+      background: rgba(16, 185, 129, 0.15);
+      color: var(--color-success);
+      border-color: rgba(16, 185, 129, 0.3);
+    }
+
+    .status-pill.error {
+      background: rgba(239, 68, 68, 0.15);
+      color: var(--color-danger);
+      border-color: rgba(239, 68, 68, 0.3);
+    }
+
+    .status-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: currentColor;
+    }
+
+    /* 通知警示條 */
+    .toast-banner {
+      display: none;
+      padding: 10px 14px;
+      border-radius: var(--radius-md);
+      font-size: 12px;
+      font-weight: 600;
+      line-height: 1.4;
+      animation: fadeIn 0.25s ease;
+    }
+
+    .toast-banner.error {
+      display: flex;
+      background: rgba(239, 68, 68, 0.15);
+      color: #f87171;
+      border: 1px solid rgba(239, 68, 68, 0.3);
+    }
+
+    .toast-banner.success {
+      display: flex;
+      background: rgba(16, 185, 129, 0.15);
+      color: #34d399;
+      border: 1px solid rgba(16, 185, 129, 0.3);
+    }
+
+    /* 主操作卡片 */
+    .action-card {
+      background: var(--bg-panel);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--border-glass);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .card-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* 手機上傳按鈕 */
+    .big-upload-btn {
+      background: linear-gradient(135deg, rgba(0, 102, 255, 0.2), rgba(0, 210, 255, 0.15));
+      border: 2px dashed rgba(0, 102, 255, 0.4);
+      border-radius: var(--radius-md);
+      padding: 26px 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      color: #fff;
+      text-align: center;
+    }
+
+    .big-upload-btn:active {
+      transform: scale(0.98);
+      background: rgba(0, 102, 255, 0.3);
+    }
+
+    .big-upload-btn svg {
+      color: var(--color-cyan);
+    }
+
+    .upload-hint {
+      font-size: 12px;
+      color: var(--text-secondary);
+    }
+
+    /* 進度條 */
+    .progress-bar-box {
+      display: none;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .progress-track {
+      width: 100%;
+      height: 6px;
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(to right, var(--color-primary), var(--color-cyan));
+      border-radius: 3px;
+      transition: width 0.2s ease;
+    }
+
+    .progress-label {
+      font-size: 11px;
+      color: var(--text-secondary);
+      display: flex;
+      justify-content: space-between;
+    }
+
+    /* 網址輸入傳送 */
+    .url-input-group {
+      display: flex;
+      gap: 8px;
+    }
+
+    .url-input {
+      flex: 1;
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid var(--border-glass);
+      color: #fff;
+      padding: 10px 14px;
+      border-radius: var(--radius-md);
+      font-size: 13px;
+      outline: none;
+    }
+
+    .url-input:focus {
+      border-color: var(--color-primary);
+    }
+
+    .btn-send {
+      background: var(--color-primary);
+      border: none;
+      color: #fff;
+      font-weight: 600;
+      font-size: 13px;
+      padding: 0 16px;
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn-send:active {
+      transform: scale(0.96);
+    }
+
+    /* 手動 PIN 輸入框 (備用) */
+    .manual-pin-box {
+      display: none;
+      flex-direction: column;
+      gap: 10px;
+      background: rgba(0, 0, 0, 0.3);
+      padding: 14px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-glass);
+    }
+
+    .pin-inputs-row {
+      display: flex;
+      gap: 8px;
+    }
+
+    .pin-input {
+      flex: 1;
+      background: rgba(0, 0, 0, 0.5);
+      border: 1px solid var(--border-glass);
+      color: #fff;
+      text-align: center;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 16px;
+      font-weight: 700;
+      letter-spacing: 4px;
+      padding: 8px;
+      border-radius: var(--radius-sm);
+      outline: none;
+    }
+
+    /* 接收列表 */
+    .feed-container {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .feed-item {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border-glass);
+      border-radius: var(--radius-md);
+      padding: 12px 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      animation: slideIn 0.3s ease;
+    }
+
+    .feed-info {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      overflow: hidden;
+    }
+
+    .feed-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: var(--radius-sm);
+      background: rgba(0, 102, 255, 0.15);
+      color: var(--color-cyan);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .feed-meta {
+      overflow: hidden;
+    }
+
+    .feed-name {
+      font-size: 13px;
+      font-weight: 600;
+      color: #fff;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .feed-sub {
+      font-size: 11px;
+      color: var(--text-secondary);
+    }
+
+    .btn-action-small {
+      background: var(--color-primary);
+      color: #fff;
+      border: none;
+      padding: 6px 12px;
+      border-radius: var(--radius-sm);
+      font-size: 12px;
+      font-weight: 600;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      flex-shrink: 0;
+    }
+
+    .terminated-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(6, 8, 15, 0.96);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .terminated-card {
+      background: var(--bg-panel);
+      border: 1px solid rgba(239, 68, 68, 0.35);
+      border-radius: var(--radius-lg);
+      padding: 28px 20px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      box-shadow: 0 0 30px rgba(239, 68, 68, 0.15);
+    }
+
+    .terminated-icon {
+      font-size: 38px;
+    }
+
+    .terminated-card h2 {
+      font-size: 17px;
+      font-weight: 800;
+      color: #f87171;
+    }
+
+    .terminated-card p {
+      font-size: 13px;
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+
+    .terminated-hint {
+      font-size: 11px;
+      color: var(--color-cyan);
+      background: rgba(0, 210, 255, 0.08);
+      border: 1px solid rgba(0, 210, 255, 0.2);
+      padding: 8px 12px;
+      border-radius: var(--radius-sm);
+      margin-top: 4px;
+    }
+
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app-container">
+    <!-- 頂部狀態 -->
+    <header class="mobile-header">
+      <div class="logo-box">
+        <div class="logo-icon">
+          <svg width="20" height="20" fill="none" stroke="#fff" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/></svg>
+        </div>
+        <div class="logo-title">
+          <h1>區網快速轉檔</h1>
+          <span>LAN FastDrop Mobile</span>
+        </div>
+      </div>
+      <div id="status-badge" class="status-pill">
+        <span class="status-dot"></span>
+        <span id="status-text">連線中...</span>
+      </div>
+    </header>
+
+    <!-- 訊息提示條 -->
+    <div id="toast-banner" class="toast-banner"></div>
+
+    <!-- 手動 PIN 碼連線 (當掃碼漏帶參數時自動展示) -->
+    <div id="manual-pin-box" class="manual-pin-box">
+      <span style="font-size: 12px; color: var(--text-secondary);">請輸入電腦螢幕上顯示的 6 位數 PIN 碼：</span>
+      <div class="pin-inputs-row">
+        <input type="text" id="manual-pin-input" class="pin-input" maxlength="6" placeholder="123456" />
+        <button id="btn-manual-pair" class="btn-send">連線</button>
+      </div>
+    </div>
+
+    <!-- 傳送檔案/圖片至電腦 -->
+    <section class="action-card">
+      <div class="card-title">
+        <svg width="18" height="18" fill="none" stroke="#38bdf8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
+        傳送至電腦 (自動存入 Downloads)
+      </div>
+      <input type="file" id="file-input" multiple style="display: none;">
+      <div class="big-upload-btn" id="btn-pick-file">
+        <svg width="36" height="36" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+        <span style="font-weight: 700; font-size: 15px;">點擊選取圖片或檔案</span>
+        <span class="upload-hint">支援相簿拍照、多檔案同時直傳</span>
+      </div>
+      <div class="progress-bar-box" id="upload-progress-box">
+        <div class="progress-track">
+          <div class="progress-fill" id="upload-progress-fill"></div>
+        </div>
+        <div class="progress-label">
+          <span id="upload-status-text">傳輸中...</span>
+          <span id="upload-percent-text">0%</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- 傳送網址至電腦 -->
+    <section class="action-card">
+      <div class="card-title">
+        <svg width="18" height="18" fill="none" stroke="#c084fc" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/></svg>
+        傳送網址 (安全檢查後在電腦開啟)
+      </div>
+      <div class="url-input-group">
+        <input type="url" id="url-input" class="url-input" placeholder="貼上 https:// 網址...">
+        <button id="btn-send-url" class="btn-send">
+          傳送
+        </button>
+      </div>
+    </section>
+
+    <!-- 接收來自電腦的檔案與網址 -->
+    <section class="action-card" style="flex: 1;">
+      <div class="card-title">
+        <svg width="18" height="18" fill="none" stroke="#34d399" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+        接收紀錄與電腦檔案
+      </div>
+      <div class="feed-container" id="received-feed">
+        <div style="text-align: center; padding: 24px; color: var(--text-secondary); font-size: 13px;">
+          尚未接收到檔案，電腦端傳送後將即時顯示於此。
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- 會話終止安全遮罩層 (背景離開/關閉/閒置防護) -->
+  <div id="terminated-modal" class="terminated-overlay" style="display: none;">
+    <div class="terminated-card">
+      <div class="terminated-icon">🔒</div>
+      <h2>傳輸會話已安全銷毀</h2>
+      <p id="terminated-reason-text">偵測到手機按下主畫面鍵／離開前景或閒置逾時。基於安全防護機制，傳輸通道與金鑰已全數關閉清理。</p>
+      <div class="terminated-hint">如需再次傳檔，請在電腦端重新生成 QR Code 並掃描連線。</div>
+    </div>
+  </div>
+
+  <script>
+    (function() {
+      const urlParams = new URLSearchParams(window.location.search);
+      let sessionId = urlParams.get('s');
+      let token = urlParams.get('t');
+      let pinCode = urlParams.get('pin');
+      let isTerminated = false;
+      let inactivityTimer = null;
+
+      const dom = {
+        statusBadge: document.getElementById('status-badge'),
+        statusText: document.getElementById('status-text'),
+        toastBanner: document.getElementById('toast-banner'),
+        manualPinBox: document.getElementById('manual-pin-box'),
+        manualPinInput: document.getElementById('manual-pin-input'),
+        btnManualPair: document.getElementById('btn-manual-pair'),
+        fileInput: document.getElementById('file-input'),
+        btnPickFile: document.getElementById('btn-pick-file'),
+        uploadProgressBox: document.getElementById('upload-progress-box'),
+        uploadProgressFill: document.getElementById('upload-progress-fill'),
+        uploadStatusText: document.getElementById('upload-status-text'),
+        uploadPercentText: document.getElementById('upload-percent-text'),
+        urlInput: document.getElementById('url-input'),
+        btnSendUrl: document.getElementById('btn-send-url'),
+        receivedFeed: document.getElementById('received-feed'),
+      };
+
+      let ws = null;
+
+      async function init() {
+        bindEvents();
+
+        if (!sessionId || !token) {
+          // 若無 URL 參數，嘗試向狀態端點獲取最新活躍 Session 或顯示手動 PIN 碼
+          try {
+            const statusRes = await fetch('/api/v1/drop/status');
+            if (statusRes.ok) {
+              const statusData = await statusRes.json();
+              sessionId = statusData.session.session_id;
+              token = statusData.session.token;
+              pinCode = statusData.session.pin_code;
+            }
+          } catch (e) {
+            console.warn('Auto fetch session failed:', e);
+          }
+        }
+
+        if (!sessionId || !token) {
+          dom.manualPinBox.style.display = 'flex';
+          showToast('請手動輸入電腦螢幕上的 6 位數 PIN 碼', 'error');
+          return;
+        }
+
+        pairWithServer(sessionId, token, pinCode);
+      }
+
+      async function pairWithServer(sId, tk, pin) {
+        try {
+          const res = await fetch('/api/v1/drop/pair', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ session_id: sId, token: tk, pin_code: pin })
+          });
+          const data = await res.json();
+          if (!res.ok) throw new Error(data.detail || '配對失敗');
+
+          sessionId = sId;
+          token = tk;
+          setConnected(true);
+          dom.manualPinBox.style.display = 'none';
+          showToast('已成功連線至電腦！', 'success');
+          connectWebSocket();
+        } catch (e) {
+          setConnected(false, '配對失敗');
+          showToast(e.message, 'error');
+          dom.manualPinBox.style.display = 'flex';
+        }
+      }
+
+      function setConnected(isConnected, customText) {
+        if (isConnected) {
+          dom.statusBadge.className = 'status-pill connected';
+          dom.statusText.textContent = '已與電腦連線';
+        } else {
+          dom.statusBadge.className = 'status-pill error';
+          dom.statusText.textContent = customText || '連線中斷';
+        }
+      }
+
+      function showToast(msg, type = 'error') {
+        dom.toastBanner.className = `toast-banner ${type}`;
+        dom.toastBanner.textContent = msg;
+        dom.toastBanner.style.display = 'flex';
+        if (type === 'success') {
+          setTimeout(() => {
+            dom.toastBanner.style.display = 'none';
+          }, 3500);
+        }
+      }
+
+      function connectWebSocket() {
+        if (!sessionId || isTerminated) return;
+        const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+        ws = new WebSocket(`${protocol}//${window.location.host}/api/v1/drop/ws/${sessionId}`);
+
+        ws.onopen = () => {
+          setConnected(true);
+          resetInactivity();
+        };
+
+        ws.onmessage = (event) => {
+          try {
+            const data = JSON.parse(event.data);
+            handleWsEvent(data);
+          } catch (e) {
+            console.error('WS Parse Error:', e);
+          }
+        };
+
+        ws.onclose = () => {
+          if (!isTerminated) {
+            setConnected(false);
+            setTimeout(connectWebSocket, 3000);
+          }
+        };
+      }
+
+      function handleWsEvent(data) {
+        resetInactivity();
+        if (data.event === 'session_terminated') {
+          showTerminated('🔒 連線已終止：' + (data.reason || '會話已結束'));
+        } else if (data.event === 'file_ready_for_mobile') {
+          addReceivedFile(data.record, data.download_url);
+        } else if (data.event === 'url_transferred' && data.sender_type === 'desktop') {
+          addReceivedUrl(data.record);
+        }
+      }
+
+      function resetInactivity() {
+        clearTimeout(inactivityTimer);
+        if (isTerminated) return;
+        // 90 秒無動作自動終止防護
+        inactivityTimer = setTimeout(() => {
+          terminateSession('手機端超過 90 秒無操作，自動安全終止');
+          showTerminated('⏱️ 會話閒置逾時：已主動中斷連線並清除快取。');
+        }, 90000);
+      }
+
+      function showTerminated(reason) {
+        isTerminated = true;
+        clearTimeout(inactivityTimer);
+        const modal = document.getElementById('terminated-modal');
+        const reasonText = document.getElementById('terminated-reason-text');
+        if (reasonText && reason) reasonText.textContent = reason;
+        if (modal) modal.style.display = 'flex';
+        setConnected(false, '會話已銷毀');
+      }
+
+      function terminateSession(reason = 'Mobile backgrounded or closed') {
+        if (!sessionId || isTerminated) return;
+        isTerminated = true;
+        clearTimeout(inactivityTimer);
+
+        try {
+          const payload = JSON.stringify({ session_id: sessionId, reason });
+          if (navigator.sendBeacon) {
+            const blob = new Blob([payload], { type: 'application/json' });
+            navigator.sendBeacon('/api/v1/drop/session/terminate', blob);
+          } else {
+            fetch('/api/v1/drop/session/terminate', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: payload,
+              keepalive: true,
+            });
+          }
+        } catch (e) {
+          console.warn('Beacon error:', e);
+        }
+
+        if (ws) {
+          try { ws.close(); } catch (e) {}
+        }
+      }
+
+      function addReceivedFile(record, downloadUrl) {
+        if (dom.receivedFeed.querySelector('div[style*="text-align: center"]')) {
+          dom.receivedFeed.innerHTML = '';
+        }
+
+        const item = document.createElement('div');
+        item.className = 'feed-item';
+        item.innerHTML = `
+          <div class="feed-info">
+            <div class="feed-icon">
+              <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/></svg>
+            </div>
+            <div class="feed-meta">
+              <div class="feed-name">${record.filename}</div>
+              <div class="feed-sub">${formatFileSize(record.file_size)} • 來自電腦</div>
+            </div>
+          </div>
+          <a href="${downloadUrl}" class="btn-action-small" download="${record.filename}">
+            下載
+          </a>
+        `;
+        dom.receivedFeed.prepend(item);
+      }
+
+      function addReceivedUrl(record) {
+        if (dom.receivedFeed.querySelector('div[style*="text-align: center"]')) {
+          dom.receivedFeed.innerHTML = '';
+        }
+
+        const item = document.createElement('div');
+        item.className = 'feed-item';
+        item.innerHTML = `
+          <div class="feed-info">
+            <div class="feed-icon" style="background: rgba(168, 85, 247, 0.15); color: #c084fc;">
+              <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/></svg>
+            </div>
+            <div class="feed-meta">
+              <div class="feed-name">${record.url}</div>
+              <div class="feed-sub">網址 • 來自電腦</div>
+            </div>
+          </div>
+          <a href="${record.url}" target="_blank" rel="noopener noreferrer" class="btn-action-small" style="background: #9333ea;">
+            開啟
+          </a>
+        `;
+        dom.receivedFeed.prepend(item);
+      }
+
+      function formatFileSize(bytes) {
+        if (!bytes) return '0 B';
+        if (bytes < 1024) return bytes + ' B';
+        if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+        return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
+      }
+
+      function bindEvents() {
+        // 1. 偵測手機按下主畫面鍵、切換至背景或螢幕鎖定
+        document.addEventListener('visibilitychange', () => {
+          if (document.visibilityState === 'hidden') {
+            terminateSession('手機按下主畫面鍵或切換至背景');
+          } else if (document.visibilityState === 'visible') {
+            if (isTerminated) {
+              showTerminated('🔒 安全防護機制已觸發：偵測到手機曾切至背景或鎖屏，會話已主動銷毀。如需再次傳輸，請於電腦端重新生成 QR Code 掃描。');
+            }
+          }
+        });
+
+        // 2. 偵測瀏覽器分頁關閉或跳轉
+        window.addEventListener('pagehide', () => {
+          terminateSession('手機端關閉分頁或跳轉');
+        });
+        window.addEventListener('beforeunload', () => {
+          terminateSession('手機端即將離開頁面');
+        });
+
+        // 3. 監聽觸控與操作以重置閒置逾時計時
+        ['touchstart', 'click', 'scroll', 'keydown'].forEach((evt) => {
+          window.addEventListener(evt, resetInactivity, { passive: true });
+        });
+
+        dom.btnPickFile?.addEventListener('click', () => {
+          resetInactivity();
+          dom.fileInput.click();
+        });
+
+        dom.btnManualPair?.addEventListener('click', async () => {
+          resetInactivity();
+          const pin = dom.manualPinInput.value.trim();
+          if (!pin || pin.length < 6) {
+            showToast('請輸入完整的 6 位數 PIN 碼', 'error');
+            return;
+          }
+          await pairWithServer(sessionId || '', token || '', pin);
+        });
+
+        dom.fileInput?.addEventListener('change', async (e) => {
+          resetInactivity();
+          const files = e.target.files;
+          if (!files || files.length === 0) return;
+
+          for (let i = 0; i < files.length; i++) {
+            await uploadSingleFile(files[i]);
+          }
+          dom.fileInput.value = '';
+        });
+
+        dom.btnSendUrl?.addEventListener('click', async () => {
+          resetInactivity();
+          const url = dom.urlInput.value.trim();
+          if (!url) return;
+
+          try {
+            const res = await fetch('/api/v1/drop/url/send', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                url: url,
+                sender_type: 'mobile',
+                auto_open: true,
+                session_id: sessionId
+              })
+            });
+            const data = await res.json();
+            if (data.status === 'success') {
+              if (data.record.is_safe) {
+                showToast('已發送網址至電腦端！' + (data.record.auto_opened ? '（電腦已自動開啟）' : ''), 'success');
+              } else {
+                showToast('網址安全警告: ' + data.record.safety_reason, 'error');
+              }
+              dom.urlInput.value = '';
+            }
+          } catch (err) {
+            showToast('發送網址失敗: ' + err.message, 'error');
+          }
+        });
+      }
+
+      async function uploadSingleFile(file) {
+        dom.uploadProgressBox.style.display = 'flex';
+        dom.uploadStatusText.textContent = `正在傳送: ${file.name}`;
+        dom.uploadPercentText.textContent = '0%';
+        dom.uploadProgressFill.style.width = '0%';
+
+        const formData = new FormData();
+        formData.append('session_id', sessionId);
+        formData.append('sender_type', 'mobile');
+        formData.append('file', file);
+
+        return new Promise((resolve, reject) => {
+          const xhr = new XMLHttpRequest();
+          xhr.open('POST', '/api/v1/drop/upload', true);
+
+          xhr.upload.onprogress = (e) => {
+            if (e.lengthComputable) {
+              const pct = Math.round((e.loaded / e.total) * 100);
+              dom.uploadProgressFill.style.width = pct + '%';
+              dom.uploadPercentText.textContent = pct + '%';
+            }
+          };
+
+          xhr.onload = () => {
+            if (xhr.status === 200) {
+              dom.uploadStatusText.textContent = `傳送成功: ${file.name}`;
+              showToast(`檔案已成功存入電腦 Downloads: ${file.name}`, 'success');
+              setTimeout(() => {
+                dom.uploadProgressBox.style.display = 'none';
+              }, 1500);
+              resolve();
+            } else {
+              showToast('傳送失敗: ' + xhr.responseText, 'error');
+              dom.uploadProgressBox.style.display = 'none';
+              reject();
+            }
+          };
+
+          xhr.onerror = () => {
+            showToast('網路傳輸異常，請確認 Wi-Fi 連線', 'error');
+            dom.uploadProgressBox.style.display = 'none';
+            reject();
+          };
+
+          xhr.send(formData);
+        });
+      }
+
+      init();
+    })();
+  </script>
+</body>
+</html>

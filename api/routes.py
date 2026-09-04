@@ -147,6 +147,18 @@ async def serve_dashboard():
     return FileResponse(index_file)
 
 
+@router.get("/drop", include_in_schema=False)
+async def serve_mobile_drop():
+    """提供區網快速轉檔手機端專屬介面 (Guard clause 驗證檔案存在)"""
+    mobile_file = WEB_DIR / "drop_mobile.html"
+    if not mobile_file.exists():
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Mobile drop interface not found. Please verify web/ directory.",
+        )
+    return FileResponse(mobile_file)
+
+
 @router.get("/api/v1/config/logs", tags=["Config"])
 async def get_log_configuration():
     """獲取當前 operations 日誌設定檔內容與解析狀態"""

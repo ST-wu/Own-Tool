@@ -11,8 +11,8 @@ class Settings(BaseSettings):
         extra="ignore",
     )
 
-    # 服務監聽
-    HOST: str = "127.0.0.1"
+    # 服務監聽 (0.0.0.0 支援本機與區網設備如手機訪問)
+    HOST: str = "0.0.0.0"
     PORT: int = 8000
 
     # 安全防護金鑰

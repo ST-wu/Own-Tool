@@ -57,30 +57,38 @@ d:\Agent\Tools\Playwright/
 │   │   ├── models.py             # 符號與邊緣關係 Pydantic 資料模型
 │   │   ├── analyzer.py           # AST 抽象語法樹靜態分析器
 │   │   └── graph.py              # CodeGraphEngine 知識圖譜與多層級 BFS 裁剪
-│   └── exam_simulator/           # 🎯 模擬測驗系統 (可插拔式題庫管理與評分引擎)
+│   ├── exam_simulator/           # 🎯 模擬測驗系統 (可插拔式題庫管理與評分引擎)
+│   │   ├── __init__.py
+│   │   ├── models.py             # 題目、選項、下拉選單與成績單 Pydantic 模型
+│   │   ├── manager.py            # ExamBankManager 動態探索、作答評分與錯題本管理
+│   │   └── data/                 # 💾 題庫資料與持久化進度集中區
+│   │       ├── question_banks/   # 📚 可插拔式題庫目錄
+│   │       │   ├── README.md     # [題庫規格書] 欄位定義、題型範例與 AI 提示詞模板
+│   │       │   └── ai-103.json   # Microsoft Azure AI-103 題庫 (182 題)
+│   │       └── exam_progress.json# 歷史測驗記錄與各科目錯題本持久化檔案
+│   └── lan_drop/                 # 📲 區網快速轉檔 (局域網雙向檔案直傳與網址安全傳遞)
 │       ├── __init__.py
-│       ├── models.py             # 題目、選項、下拉選單與成績單 Pydantic 模型
-│       ├── manager.py            # ExamBankManager 動態探索、作答評分與錯題本管理
-│       └── data/                 # 💾 題庫資料與持久化進度集中區
-│           ├── question_banks/   # 📚 可插拔式題庫目錄
-│           │   ├── README.md     # [題庫規格書] 欄位定義、題型範例與 AI 提示詞模板
-│           │   └── ai-103.json   # Microsoft Azure AI-103 題庫 (182 題)
-│           └── exam_progress.json# 歷史測驗記錄與各科目錯題本持久化檔案
+│       ├── models.py             # Session, File, URL, Device Pydantic 模型
+│       ├── security.py           # 私有 IP 白名單、路徑穿越防護與 URL 安全沙盒
+│       └── manager.py            # LanDropManager 配對、Downloads 儲存與 WebSocket 廣播
 │
 ├── api/                          # 🌐 HTTP REST API 服務介面
 │   ├── __init__.py
-│   ├── routes.py                 # 核心路由定義 (/health, /api/v1/tasks)
+│   ├── routes.py                 # 核心路由定義 (/health, /api/v1/tasks, /drop)
 │   ├── nebula_routes.py          # 星雲圖路由 (/api/v1/nebula/scan, /graph, /code)
 │   ├── exam_routes.py            # 模擬測驗路由 (/api/v1/exam/banks, /questions, /submit)
+│   ├── lan_drop_routes.py        # 區網轉檔路由 (/api/v1/drop/status, /pair, /upload, /url/send, /ws)
 │   └── schemas.py                # 請求與響應 Pydantic 資料結構定義
 │
 ├── web/                          # 🖥️ Web 控制台、星雲視覺化與測驗前端
 │   ├── index.html                # 整合型工具中心單頁儀表板 (SPA)
+│   ├── drop_mobile.html          # 📱 手機端專屬極簡響應式直傳介面
 │   └── static/                   # 靜態資源目錄
 │       ├── css/style.css         # 現代深色玻璃擬態樣式表
 │       ├── js/app.js             # 主控制台與工作區路由邏輯
 │       ├── js/nebula.js          # D3.js 力導向星雲圖渲染與代碼自省
 │       ├── js/exam.js            # 模擬測驗作答互動、計時與成績單引擎
+│       ├── js/lan_drop.js        # 區網快速轉檔電腦端互動邏輯
 │       └── vendor/d3.min.js      # 輕量 D3.js v7 圖形物理庫
 │
 ├── tests/                        # 🧪 自動化測試套件 (持續整合品質保證)
@@ -92,7 +100,8 @@ d:\Agent\Tools\Playwright/
 │   ├── test_op_logger.py         # 操作審計日誌與 30 天過期清理測試
 │   ├── test_web_ui.py            # Web 控制台與 WebSocket 串流測試
 │   ├── test_code_nebula.py       # 代碼星雲圖 AST 分析與 BFS 子圖測試
-│   └── test_exam_simulator.py    # 模擬測驗題庫動態掃描與評分測試
+│   ├── test_exam_simulator.py    # 模擬測驗題庫動態掃描與評分測試
+│   └── test_lan_drop.py          # 區網快速轉檔安全性、傳輸與配對測試
 │
 ├── logs/                         # 📝 系統與模組日誌集中目錄
 │   ├── operations/               # 🎯 專案操作總紀錄

@@ -43,7 +43,12 @@ async def lifespan(app: FastAPI):
         status="SUCCESS",
         details={"host": settings.HOST, "port": settings.PORT, "headless": settings.HEADLESS},
     )
-    logger.info(f"Playwright 常駐服務已就緒，API 監聽於 http://{settings.HOST}:{settings.PORT}")
+    from tools.lan_drop.manager import lan_drop_manager
+    lan_ip = lan_drop_manager.get_lan_ip()
+    logger.info("Playwright 常駐服務已就緒：")
+    logger.info(f"  • 電腦本機存取： http://localhost:{settings.PORT} (或 http://127.0.0.1:{settings.PORT})")
+    if lan_ip and lan_ip != "127.0.0.1":
+        logger.info(f"  • 手機區網存取： http://{lan_ip}:{settings.PORT}")
     yield
 
     # 優雅停機流程 (Graceful Shutdown)
@@ -65,9 +70,13 @@ app = FastAPI(
 # 掛載 API 路由
 from api.nebula_routes import nebula_router
 from api.exam_routes import exam_router
+from api.lan_drop_routes import router as lan_drop_router
+from api.clipboard_routes import clipboard_router
 app.include_router(router)
 app.include_router(nebula_router)
 app.include_router(exam_router)
+app.include_router(lan_drop_router)
+app.include_router(clipboard_router)
 
 # 掛載靜態資源與產出物預覽
 from pathlib import Path
