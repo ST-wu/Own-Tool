@@ -72,11 +72,13 @@ from api.nebula_routes import nebula_router
 from api.exam_routes import exam_router
 from api.lan_drop_routes import router as lan_drop_router
 from api.clipboard_routes import clipboard_router
+from api.solar_tide_routes import solar_tide_router
 app.include_router(router)
 app.include_router(nebula_router)
 app.include_router(exam_router)
 app.include_router(lan_drop_router)
 app.include_router(clipboard_router)
+app.include_router(solar_tide_router)
 
 # 掛載靜態資源與產出物預覽
 from pathlib import Path

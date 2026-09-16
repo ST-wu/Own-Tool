@@ -13,6 +13,13 @@ async def test_dashboard_route_serves_html():
         assert response.status_code == 200
         assert "Playwright" in response.text
         assert "task-modal" in response.text
+        assert "open-tool-solartide-card" in response.text
+        assert "view-solartide-container" in response.text
+        assert "solar_tide.js" in response.text
+        assert "canvas-st-shadow" not in response.text
+        assert "canvas-st-coast" not in response.text
+        assert "btn-st-view-south" in response.text
+        assert "btn-st-span-30" in response.text
 
 
 @pytest.mark.asyncio

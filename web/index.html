@@ -132,6 +132,21 @@
               <button class="btn btn-sm btn-primary" id="btn-enter-clipboard">開啟剪貼簿 &rarr;</button>
             </div>
           </div>
+
+          <!-- 工具卡片 5：日潮星象儀 -->
+          <div class="tool-feature-card" id="open-tool-solartide-card">
+            <div class="tool-card-glow gold"></div>
+            <div class="tool-card-header">
+              <div class="tool-icon-wrapper gold">☀️</div>
+              <span class="tool-status-pill gold-pill">天文幾何 • 潮汐調和</span>
+            </div>
+            <h3 class="tool-card-title">日潮星象儀 (SolarTide)</h3>
+            <p class="tool-card-desc">實時計算所在地太陽天頂座標、地表日晷陰影、月相引潮力與海岸調和潮位。支援 24h 時間旅行平滑模擬。</p>
+            <div class="tool-card-footer">
+              <span class="tool-meta-text">預設本機位置 • 支援全時區穿梭</span>
+              <button class="btn btn-sm btn-primary btn-gold" id="btn-enter-solartide">開啟星象儀 &rarr;</button>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -911,6 +926,219 @@
     </div>
   </div>
 
+  <!-- =========================================================================
+       視圖 5：日潮星象儀 (Solar & Tidal Observatory Workspace)
+       ========================================================================= -->
+  <div id="view-solartide-container" class="view-container">
+    <div class="solartide-layout">
+      <!-- 頂部導航列 -->
+      <div class="workspace-nav-bar">
+        <button id="solartide-back-to-hub-btn" class="btn btn-sm btn-secondary back-to-hub-btn">
+          &larr; 返回工具總覽首頁
+        </button>
+        <div class="workspace-title-group">
+          <span class="workspace-pill gold">☀️ 天文海洋</span>
+          <h2 class="workspace-title">日潮星象儀 (Solar & Tidal Observatory)</h2>
+        </div>
+        <div class="solartide-top-status">
+          <span id="st-time-mode-badge" class="st-badge st-badge-live">即時電腦時鐘 (Live)</span>
+          <span id="st-current-loc-badge" class="st-loc-pill">淡水漁人碼頭</span>
+        </div>
+      </div>
+
+      <!-- 地點與時間指揮艙 -->
+      <div class="solartide-master-bar">
+        <!-- 地點控制列 -->
+        <div class="st-location-row">
+          <div class="st-loc-selector-wrap">
+            <span class="st-control-label">📍 海岸/港口快選:</span>
+            <select id="sel-st-location" class="form-select-sm"></select>
+            <button id="btn-st-detect-location" class="btn btn-sm btn-primary" title="獲取瀏覽器 GPS 自動偵測位置">
+              🧭 偵測電腦目前位置
+            </button>
+          </div>
+
+          <div class="st-coord-inputs-wrap">
+            <span class="st-control-label">自訂位置:</span>
+            <input type="text" id="input-st-loc-name" class="form-input-sm" placeholder="自訂地點名稱" />
+            <input type="number" id="input-st-lat" class="form-input-sm coord-input" step="0.0001" placeholder="緯度 Lat" />
+            <input type="number" id="input-st-lon" class="form-input-sm coord-input" step="0.0001" placeholder="經度 Lon" />
+            <button id="btn-st-apply-coord" class="btn btn-sm btn-outline">套用座標</button>
+          </div>
+        </div>
+
+        <!-- 時間旅行動態控制列 -->
+        <div class="st-timetravel-row">
+          <div class="st-playback-group">
+            <button id="btn-st-now" class="btn btn-sm btn-secondary" title="回到當前即時電腦時間">⏱️ 回到現在</button>
+            <button id="btn-st-prev-hour" class="btn btn-sm btn-icon-round" title="後退 1 小時">◀ -1h</button>
+            <button id="btn-st-play" class="btn btn-sm btn-primary">▶ 播放模擬</button>
+            <button id="btn-st-next-hour" class="btn btn-sm btn-icon-round" title="前進 1 小時">+1h ▶</button>
+            <select id="sel-st-speed" class="form-select-sm" title="播放倍速">
+              <option value="1">1x 實時</option>
+              <option value="60" selected>60x (1秒=1分)</option>
+              <option value="3600">3600x (1秒=1小時)</option>
+            </select>
+          </div>
+
+          <div class="st-slider-wrap">
+            <div class="st-slider-header">
+              <span class="st-slider-label">24 小時日光與潮汐時間軸:</span>
+              <span id="st-clock-display" class="st-clock-display">2026-09-08 00:00:00</span>
+            </div>
+            <input type="range" id="slider-st-time" min="0" max="1439" value="660" class="st-time-slider" />
+            <div class="st-slider-ticks">
+              <span>00:00 (子夜)</span>
+              <span>06:00 (晨曦)</span>
+              <span>12:00 (正午)</span>
+              <span>18:00 (黃昏)</span>
+              <span>24:00</span>
+            </div>
+          </div>
+
+          <div class="st-datetime-picker-wrap">
+            <input type="datetime-local" id="input-st-datetime" class="form-input-sm" />
+          </div>
+        </div>
+      </div>
+
+
+
+      <!-- 四大核心數據卡片 -->
+      <div class="st-metrics-cards-grid">
+        <!-- 太陽座標卡片 -->
+        <div class="st-metric-card sun-card">
+          <div class="st-metric-icon">☀️</div>
+          <div class="st-metric-info">
+            <span class="st-metric-title">太陽位置與光影</span>
+            <div class="st-metric-val-group">
+              <span class="st-big-num" id="st-sun-alt-val">--°</span>
+              <span class="st-sub-label">仰角 Altitude</span>
+            </div>
+            <div class="st-metric-tags">
+              <span>方位: <strong id="st-sun-az-val">--°</strong></span>
+              <span id="st-sun-phase-text" class="st-phase-badge">載入中...</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 海岸潮位卡片 -->
+        <div class="st-metric-card tide-card">
+          <div class="st-metric-icon">🌊</div>
+          <div class="st-metric-info">
+            <span class="st-metric-title">海岸即時潮位</span>
+            <div class="st-metric-val-group">
+              <span class="st-big-num" id="st-tide-height-val">-- m</span>
+              <span id="st-tide-trend-badge" class="st-pill st-pill-flood">漲潮 ⇡</span>
+            </div>
+            <div class="st-metric-tags">
+              <span id="st-tide-type-badge" class="st-pill st-pill-normal">一般潮</span>
+              <span id="st-next-tide-text" class="st-sub-text">預報計算中...</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 月相引潮力卡片 -->
+        <div class="st-metric-card moon-card">
+          <div class="st-metric-icon">🌙</div>
+          <div class="st-metric-info">
+            <span class="st-metric-title">月相與引潮力</span>
+            <div class="st-metric-val-group">
+              <span class="st-big-text" id="st-moon-phase-text">--</span>
+            </div>
+            <div class="st-metric-tags">
+              <span id="st-moon-illum-text">受光率: --%</span>
+              <span id="st-moon-age-text">月齡: -- 天</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 戶外活動與日照節點卡片 -->
+        <div class="st-metric-card schedule-card">
+          <div class="st-metric-icon">🧭</div>
+          <div class="st-metric-info">
+            <span class="st-metric-title">戶外安全與日光時刻</span>
+            <div id="st-harvest-status" class="st-alert st-alert-warning">計算中...</div>
+            <div class="st-sun-times-row">
+              <span>🌅 日出: <strong id="st-time-sunrise">--:--</strong></span>
+              <span>☀️ 正午: <strong id="st-time-noon">--:--</strong></span>
+              <span>🌇 日落: <strong id="st-time-sunset">--:--</strong></span>
+            </div>
+            <div class="st-sun-times-sub">
+              <span>📸 黃金時刻: <span id="st-time-golden-hour">--</span></span>
+              <span>🌌 藍調時刻: <span id="st-time-blue-hour">--</span></span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 微氣候即時大氣卡片 -->
+        <div class="st-metric-card weather-card">
+          <div class="st-metric-icon">🌤️</div>
+          <div class="st-metric-info">
+            <span class="st-metric-title">即時大氣微氣候</span>
+            <div class="st-metric-val-group">
+              <span class="st-big-num" id="st-weather-temp">--°C</span>
+              <span class="st-sub-label" id="st-weather-app-temp">體感 --°C</span>
+              <span id="st-weather-condition-badge" class="st-pill st-pill-weather">即時氣象</span>
+            </div>
+            <div class="st-metric-tags">
+              <span>💧 濕度: <strong id="st-weather-humidity">--%</strong></span>
+              <span>💨 風速: <strong id="st-weather-wind">-- km/h</strong></span>
+              <span>🧭 風向: <strong id="st-weather-wind-dir">--°</strong></span>
+              <span>☀️ UV: <strong id="st-weather-uv">--</strong></span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <!-- 視覺畫布雙欄展示區 (地面視圖 + 多尺度潮位波形) -->
+      <div class="st-visuals-grid">
+        <!-- 左側面板：站在地面看天空 地平線天頂透視圖 -->
+        <div class="st-visual-panel">
+          <div class="st-panel-header">
+            <div class="st-panel-header-title-row">
+              <h3>🌄 地面地平線天頂透視圖 (Ground Sky Horizon View)</h3>
+              <div class="st-view-angle-chips">
+                <button class="st-chip-btn active" data-view="south" id="btn-st-view-south">面向正南 (180°)</button>
+                <button class="st-chip-btn" data-view="east" id="btn-st-view-east">面向正東 (90°)</button>
+                <button class="st-chip-btn" data-view="west" id="btn-st-view-west">面向正西 (270°)</button>
+                <button class="st-chip-btn" data-view="north" id="btn-st-view-north">面向正北 (0°)</button>
+                <button class="st-chip-btn" data-view="pano" id="btn-st-view-pano">360° 全景</button>
+              </div>
+            </div>
+            <span class="st-panel-desc">站在地面真實肉眼仰望視角 • 支援東西南北切換或滑鼠水平拖曳轉向 (自動連動當前即時大氣)</span>
+
+
+          </div>
+          <div class="st-canvas-container ground-view-container">
+            <canvas id="canvas-st-sky-dome" width="560" height="340"></canvas>
+          </div>
+        </div>
+
+        <!-- 右側面板：多尺度連續潮汐波動走勢 -->
+        <div class="st-visual-panel">
+          <div class="st-panel-header">
+            <div class="st-panel-header-title-row">
+              <h3>🌊 海岸連續潮汐波動走勢 (Tidal Wave Plot)</h3>
+              <div class="st-span-chips">
+                <button class="st-span-btn active" data-span="1" id="btn-st-span-1">1日 (24h)</button>
+                <button class="st-span-btn" data-span="3" id="btn-st-span-3">3日</button>
+                <button class="st-span-btn" data-span="7" id="btn-st-span-7">7日 (週)</button>
+                <button class="st-span-btn" data-span="14" id="btn-st-span-14">14日 (半月)</button>
+                <button class="st-span-btn" data-span="30" id="btn-st-span-30">30日 (月)</button>
+              </div>
+            </div>
+            <span class="st-panel-desc">多重分潮調和模型 • 支援切換週/月直觀查看朔望大潮與小潮潮差振幅變化</span>
+          </div>
+          <div class="st-canvas-container tide-wave-container">
+            <canvas id="canvas-st-tide-wave" width="560" height="340"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- 模擬考結算成績單 Modal -->
   <div id="exam-result-modal" class="modal-backdrop hidden">
     <div class="modal-dialog modal-exam-result">
@@ -1004,6 +1232,7 @@
   <script src="/static/js/exam.js"></script>
   <script src="/static/js/lan_drop.js"></script>
   <script src="/static/js/clipboard.js"></script>
+  <script src="/static/js/solar_tide.js"></script>
   <script src="/static/js/app.js"></script>
 </body>
 </html>

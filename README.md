@@ -71,11 +71,18 @@ d:\Agent\Tools\Playwright/
 │   │   ├── models.py             # Session, File, URL, Device Pydantic 模型
 │   │   ├── security.py           # 私有 IP 白名單、路徑穿越防護與 URL 安全沙盒
 │   │   └── manager.py            # LanDropManager 配對、Downloads 儲存與 WebSocket 廣播
-│   └── smart_clipboard/         # 📋 智慧剪貼簿進階管家 (先進先出 FIFO、自動步進與零殘留銷毀)
+│   ├── smart_clipboard/         # 📋 智慧剪貼簿進階管家 (先進先出 FIFO、自動步進與零殘留銷毀)
+│   │   ├── __init__.py
+│   │   ├── models.py             # ClipItem, ClipboardMode, ClipboardConfig 模型
+│   │   ├── windows_clipboard.py  # Win32 user32/kernel32 剪貼簿與按鍵偵測
+│   │   └── manager.py            # SmartClipboardManager FIFO 佇列與正緣 Ctrl+V 監聽
+│   └── solar_tide/              # ☀️ 日潮星象儀 (天體太陽幾何、月相引潮力、海岸調和潮位與微氣候)
 │       ├── __init__.py
-│       ├── models.py             # ClipItem, ClipboardMode, ClipboardConfig 模型
-│       ├── windows_clipboard.py  # Win32 user32/kernel32 剪貼簿與按鍵偵測
-│       └── manager.py            # SmartClipboardManager FIFO 佇列與正緣 Ctrl+V 監聽
+│       ├── models.py             # SolarPosition, DayTimes, MoonPosition, TideStatus, WeatherInfo 模型
+│       ├── calculator.py         # NOAA 太陽演算法 + 月相 + 多重分潮調和物理疊加引擎
+│       ├── weather.py            # 即時微氣候服務 (Open-Meteo API、WMO 代碼解析與 10 分鐘快取)
+│       └── manager.py            # 港口/自訂座標管理與時空解算器
+
 │
 ├── api/                          # 🌐 HTTP REST API 服務介面
 │   ├── __init__.py
@@ -84,6 +91,7 @@ d:\Agent\Tools\Playwright/
 │   ├── exam_routes.py            # 模擬測驗路由 (/api/v1/exam/banks, /questions, /submit)
 │   ├── lan_drop_routes.py        # 區網轉檔路由 (/api/v1/drop/status, /pair, /upload, /url/send, /ws)
 │   ├── clipboard_routes.py       # 智慧剪貼簿路由 (/api/v1/clipboard/state, /toggle, /clear, /ws)
+│   ├── solar_tide_routes.py      # 日潮星象儀路由 (/api/solartide/locations, /calculate)
 │   └── schemas.py                # 請求與響應 Pydantic 資料結構定義
 │
 ├── web/                          # 🖥️ Web 控制台、星雲視覺化與測驗前端
@@ -96,6 +104,7 @@ d:\Agent\Tools\Playwright/
 │       ├── js/exam.js            # 模擬測驗作答互動、計時與成績單引擎
 │       ├── js/lan_drop.js        # 區網快速轉檔電腦端互動邏輯
 │       ├── js/clipboard.js       # 智慧剪貼簿前端狀態渲染與 WebSocket 同步
+│       ├── js/solar_tide.js      # 日潮星象儀前端 Canvas 穹頂、正弦波與時間旅行引擎
 │       └── vendor/d3.min.js      # 輕量 D3.js v7 圖形物理庫
 │
 ├── tests/                        # 🧪 自動化測試套件 (持續整合品質保證)
@@ -109,7 +118,8 @@ d:\Agent\Tools\Playwright/
 │   ├── test_code_nebula.py       # 代碼星雲圖 AST 分析與 BFS 子圖測試
 │   ├── test_exam_simulator.py    # 模擬測驗題庫動態掃描與評分測試
 │   ├── test_lan_drop.py          # 區網快速轉檔安全性、傳輸與配對測試
-│   └── test_smart_clipboard.py   # 剪貼簿管家 FIFO、正緣步進、防爆上限與原子銷毀測試
+│   ├── test_smart_clipboard.py   # 剪貼簿管家 FIFO、正緣步進、防爆上限與原子銷毀測試
+│   └── test_solar_tide.py        # 日潮星象儀天文幾何、月相引潮力與調和潮位測試
 │
 ├── logs/                         # 📝 系統與模組日誌集中目錄
 │   ├── operations/               # 🎯 專案操作總紀錄
@@ -298,9 +308,12 @@ module.exports = {
     max_records_per_day: 10000, // 單日筆數上限保護
     max_file_size_mb: 10,       // 單檔大小上限
     log_level: "INFO",
-    mask_sensitive_keys: true
   }
 };
 ```
+
 常駐服務啟動時及每日排程將自動執行 `clean_expired_logs()`，自動掃除超過 `retention_days` 的歷史檔案。
+
+
+
 

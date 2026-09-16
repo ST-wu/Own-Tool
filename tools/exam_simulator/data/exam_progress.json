@@ -403,6 +403,96 @@
         "correct": 1,
         "is_passed": true,
         "time_spent_seconds": 30
+      },
+      {
+        "timestamp": 1788839287.5103405,
+        "mode": "exam",
+        "score_pct": 50.0,
+        "total": 2,
+        "correct": 1,
+        "is_passed": false,
+        "time_spent_seconds": 60
+      },
+      {
+        "timestamp": 1788839287.5507274,
+        "mode": "practice",
+        "score_pct": 100.0,
+        "total": 1,
+        "correct": 1,
+        "is_passed": true,
+        "time_spent_seconds": 30
+      },
+      {
+        "timestamp": 1789545370.072022,
+        "mode": "exam",
+        "score_pct": 50.0,
+        "total": 2,
+        "correct": 1,
+        "is_passed": false,
+        "time_spent_seconds": 60
+      },
+      {
+        "timestamp": 1789545370.1034994,
+        "mode": "practice",
+        "score_pct": 100.0,
+        "total": 1,
+        "correct": 1,
+        "is_passed": true,
+        "time_spent_seconds": 30
+      },
+      {
+        "timestamp": 1789546432.046452,
+        "mode": "exam",
+        "score_pct": 50.0,
+        "total": 2,
+        "correct": 1,
+        "is_passed": false,
+        "time_spent_seconds": 60
+      },
+      {
+        "timestamp": 1789546432.0733235,
+        "mode": "practice",
+        "score_pct": 100.0,
+        "total": 1,
+        "correct": 1,
+        "is_passed": true,
+        "time_spent_seconds": 30
+      },
+      {
+        "timestamp": 1789547180.6674862,
+        "mode": "exam",
+        "score_pct": 50.0,
+        "total": 2,
+        "correct": 1,
+        "is_passed": false,
+        "time_spent_seconds": 60
+      },
+      {
+        "timestamp": 1789547180.7000113,
+        "mode": "practice",
+        "score_pct": 100.0,
+        "total": 1,
+        "correct": 1,
+        "is_passed": true,
+        "time_spent_seconds": 30
+      },
+      {
+        "timestamp": 1789547530.6122673,
+        "mode": "exam",
+        "score_pct": 50.0,
+        "total": 2,
+        "correct": 1,
+        "is_passed": false,
+        "time_spent_seconds": 60
+      },
+      {
+        "timestamp": 1789547530.6449795,
+        "mode": "practice",
+        "score_pct": 100.0,
+        "total": 1,
+        "correct": 1,
+        "is_passed": true,
+        "time_spent_seconds": 30
       }
     ]
   }

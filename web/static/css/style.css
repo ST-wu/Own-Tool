@@ -3651,3 +3651,460 @@ body {
   to { opacity: 1; transform: translate(-50%, 0); }
 }
 
+/* ==========================================================================
+   日潮星象儀 (SolarTide / HelioTide) 專屬樣式
+   ========================================================================== */
+
+/* 1. 首頁工具卡片特殊金黃光暈 */
+.tool-card-glow.gold {
+  background: radial-gradient(circle, rgba(245, 158, 11, 0.35) 0%, rgba(217, 119, 6, 0.05) 70%, transparent 100%);
+}
+.tool-icon-wrapper.gold {
+  background: rgba(245, 158, 11, 0.15);
+  color: #fbbf24;
+  border: 1px solid rgba(245, 158, 11, 0.3);
+}
+.tool-status-pill.gold-pill {
+  background: rgba(245, 158, 11, 0.12);
+  color: #fcd34d;
+  border-color: rgba(245, 158, 11, 0.3);
+}
+.btn-gold {
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+  color: #fff;
+  border: 1px solid #fbbf24;
+}
+.btn-gold:hover {
+  background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+  box-shadow: 0 0 14px rgba(245, 158, 11, 0.45);
+}
+
+/* 2. 工作區主要佈局 */
+.solartide-layout {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  padding: 1.5rem;
+  max-width: 1440px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.workspace-pill.gold {
+  background: rgba(245, 158, 11, 0.15);
+  color: #fbbf24;
+  border: 1px solid rgba(245, 158, 11, 0.35);
+}
+
+.solartide-top-status {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-left: auto;
+}
+
+.st-badge {
+  padding: 4px 12px;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+.st-badge-live {
+  background: rgba(16, 185, 129, 0.15);
+  color: #34d399;
+  border: 1px solid rgba(16, 185, 129, 0.35);
+  animation: pulseLight 2s infinite ease-in-out;
+}
+.st-badge-simulation {
+  background: rgba(245, 158, 11, 0.2);
+  color: #fcd34d;
+  border: 1px solid rgba(245, 158, 11, 0.45);
+}
+.st-loc-pill {
+  background: rgba(15, 23, 42, 0.65);
+  color: #94a3b8;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 4px 12px;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+}
+.st-loc-pill.active {
+  color: #38bdf8;
+  border-color: rgba(56, 189, 248, 0.35);
+}
+
+/* 3. 地點與時間控制艙 */
+.solartide-master-bar {
+  background: rgba(15, 23, 42, 0.75);
+  backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-lg);
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.st-location-row, .st-timetravel-row {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  flex-wrap: wrap;
+}
+
+.st-loc-selector-wrap, .st-coord-inputs-wrap {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+.st-control-label {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: #cbd5e1;
+}
+
+.coord-input {
+  width: 105px !important;
+}
+
+.st-playback-group {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.st-slider-wrap {
+  flex: 1;
+  min-width: 280px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.st-slider-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.st-slider-label {
+  font-size: 0.75rem;
+  color: #94a3b8;
+  font-weight: 500;
+}
+
+.st-clock-display {
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  font-weight: 700;
+  color: #fbbf24;
+}
+
+/* 日夜色彩光譜滑桿 */
+.st-time-slider {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 8px;
+  border-radius: 4px;
+  background: linear-gradient(
+    90deg,
+    #090d16 0%,     /* 00:00 子夜 */
+    #1e1b4b 20%,    /* 05:00 晨曦前 */
+    #ea580c 25%,    /* 06:00 日出晨霞 */
+    #38bdf8 45%,    /* 11:00 白天晴空 */
+    #60a5fa 55%,    /* 13:00 白天晴空 */
+    #f97316 75%,    /* 18:00 日落暮霞 */
+    #312e81 82%,    /* 19:30 藍調時刻 */
+    #090d16 100%    /* 24:00 子夜 */
+  );
+  outline: none;
+  cursor: pointer;
+}
+.st-time-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #fbbf24;
+  border: 2px solid #fff;
+  box-shadow: 0 0 10px rgba(245, 158, 11, 0.7);
+  cursor: pointer;
+  transition: transform 0.15s;
+}
+.st-time-slider::-webkit-slider-thumb:hover {
+  transform: scale(1.15);
+}
+
+.st-slider-ticks {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.6875rem;
+  color: #64748b;
+  padding: 0 2px;
+}
+
+/* 4. 核心數據卡片四欄 */
+.st-metrics-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1rem;
+}
+
+.st-metric-card {
+  background: rgba(15, 23, 42, 0.65);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: var(--radius-md);
+  padding: 1rem 1.25rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  transition: transform 0.2s, border-color 0.2s;
+}
+.st-metric-card:hover {
+  border-color: rgba(255, 255, 255, 0.15);
+  transform: translateY(-2px);
+}
+
+.st-metric-card.sun-card {
+  border-left: 4px solid #f59e0b;
+}
+.st-metric-card.tide-card {
+  border-left: 4px solid #0284c7;
+}
+.st-metric-card.moon-card {
+  border-left: 4px solid #8b5cf6;
+}
+.st-metric-card.schedule-card {
+  border-left: 4px solid #10b981;
+}
+
+.st-metric-icon {
+  font-size: 2rem;
+  line-height: 1;
+  padding: 0.4rem;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: var(--radius-sm);
+}
+
+.st-metric-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  flex: 1;
+}
+
+.st-metric-title {
+  font-size: 0.75rem;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 600;
+}
+
+.st-metric-val-group {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+}
+
+.st-big-num {
+  font-family: var(--font-mono);
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #fff;
+}
+.st-big-text {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #e2e8f0;
+}
+.st-sub-label {
+  font-size: 0.75rem;
+  color: #64748b;
+}
+
+.st-metric-tags {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.75rem;
+  color: #94a3b8;
+  flex-wrap: wrap;
+}
+
+.st-phase-badge {
+  color: #fcd34d;
+  font-weight: 600;
+}
+
+.st-pill {
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 0.6875rem;
+  font-weight: 600;
+}
+.st-pill-flood {
+  background: rgba(14, 165, 233, 0.18);
+  color: #38bdf8;
+  border: 1px solid rgba(14, 165, 233, 0.35);
+}
+.st-pill-ebb {
+  background: rgba(244, 63, 94, 0.18);
+  color: #fb7185;
+  border: 1px solid rgba(244, 63, 94, 0.35);
+}
+.st-pill-spring {
+  background: rgba(139, 92, 246, 0.18);
+  color: #c084fc;
+}
+.st-pill-neap {
+  background: rgba(20, 184, 166, 0.18);
+  color: #2dd4bf;
+}
+.st-pill-normal {
+  background: rgba(148, 163, 184, 0.15);
+  color: #cbd5e1;
+}
+
+.st-alert {
+  padding: 4px 8px;
+  border-radius: var(--radius-sm);
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+.st-alert-success {
+  background: rgba(16, 185, 129, 0.15);
+  color: #34d399;
+  border: 1px solid rgba(16, 185, 129, 0.3);
+}
+.st-alert-warning {
+  background: rgba(245, 158, 11, 0.15);
+  color: #fbbf24;
+  border: 1px solid rgba(245, 158, 11, 0.3);
+}
+
+.st-sun-times-row, .st-sun-times-sub {
+  display: flex;
+  gap: 0.8rem;
+  font-size: 0.6875rem;
+  color: #cbd5e1;
+  flex-wrap: wrap;
+}
+
+/* 5. 視覺畫布雙欄網格 */
+.st-visuals-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(480px, 1fr));
+  gap: 1.25rem;
+}
+
+.st-visual-panel {
+  background: rgba(15, 23, 42, 0.7);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-lg);
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.st-panel-header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.st-panel-header-title-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+
+.st-panel-header h3 {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #f1f5f9;
+  margin: 0;
+}
+.st-panel-desc {
+  font-size: 0.75rem;
+  color: #64748b;
+}
+
+/* 觀測視角與時間跨度切換標籤組 */
+.st-view-angle-chips, .st-span-chips {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  flex-wrap: wrap;
+}
+
+.st-chip-btn, .st-span-btn {
+  background: rgba(0, 0, 0, 0.4);
+  color: #94a3b8;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 3px 10px;
+  border-radius: var(--radius-sm);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.st-chip-btn:hover, .st-span-btn:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.st-chip-btn.active {
+  background: rgba(245, 158, 11, 0.2);
+  color: #fcd34d;
+  border-color: #f59e0b;
+  box-shadow: 0 0 8px rgba(245, 158, 11, 0.25);
+}
+
+.st-span-btn.active {
+  background: rgba(14, 165, 233, 0.2);
+  color: #38bdf8;
+  border-color: #0284c7;
+  box-shadow: 0 0 8px rgba(14, 165, 233, 0.25);
+}
+
+.st-canvas-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.4);
+  border-radius: var(--radius-md);
+  padding: 0.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  cursor: grab;
+}
+.st-canvas-container:active {
+  cursor: grabbing;
+}
+.tide-wave-container {
+  cursor: default !important;
+}
+
+/* 5. 微氣候卡片樣式 */
+.st-metric-card.weather-card {
+  border-left: 4px solid #06b6d4;
+}
+.st-pill-weather {
+  background: rgba(6, 182, 212, 0.18);
+  color: #22d3ee;
+  border: 1px solid rgba(6, 182, 212, 0.3);
+}
+
+
+
+

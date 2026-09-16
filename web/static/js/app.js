@@ -90,6 +90,12 @@
       if (window.ClipboardApp) window.ClipboardApp.init();
       window.scrollTo({ top: 0, behavior: 'smooth' });
     },
+    showSolarTide() {
+      document.querySelectorAll('.view-container').forEach((v) => v.classList.remove('active'));
+      document.getElementById('view-solartide-container')?.classList.add('active');
+      if (window.SolarTide) window.SolarTide.init();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    },
   };
   window.AppRouter = AppRouter;
 
@@ -142,10 +148,19 @@
       if (e.target.tagName !== 'BUTTON') AppRouter.showClipboard();
     });
 
+    document.getElementById('btn-enter-solartide')?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      AppRouter.showSolarTide();
+    });
+    document.getElementById('open-tool-solartide-card')?.addEventListener('click', (e) => {
+      if (e.target.tagName !== 'BUTTON') AppRouter.showSolarTide();
+    });
+
     document.getElementById('nebula-back-to-hub-btn')?.addEventListener('click', () => AppRouter.showMainHub());
     document.getElementById('exam-back-to-hub-btn')?.addEventListener('click', () => AppRouter.showMainHub());
     document.getElementById('drop-back-to-hub-btn')?.addEventListener('click', () => AppRouter.showMainHub());
     document.getElementById('clipboard-back-to-hub-btn')?.addEventListener('click', () => AppRouter.showMainHub());
+    document.getElementById('solartide-back-to-hub-btn')?.addEventListener('click', () => AppRouter.showMainHub());
 
     // 重新整理
     elements.refreshBtn.addEventListener('click', () => {
