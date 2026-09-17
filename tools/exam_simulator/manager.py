@@ -1,6 +1,7 @@
 import json
 import random
 import time
+from datetime import datetime
 from pathlib import Path
 from typing import Any
 from core.logger import logger
@@ -278,17 +279,24 @@ class ExamBankManager:
         score_pct = round((correct_count / total_submitted * 100), 1) if total_submitted > 0 else 0.0
         is_passed = score_pct >= 70.0
 
-        user_prog.exam_history.append(
-            {
-                "timestamp": time.time(),
-                "mode": submission.mode,
-                "score_pct": score_pct,
-                "total": total_submitted,
-                "correct": correct_count,
-                "is_passed": is_passed,
-                "time_spent_seconds": submission.time_spent_seconds,
-            }
-        )
+        # 僅全真模擬 (exam) 寫入測驗歷史記錄，練習模式不留存
+        if submission.mode == "exam":
+            user_prog.exam_history.append(
+                {
+                    "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+                    "mode": submission.mode,
+                    "score_pct": score_pct,
+                    "total": total_submitted,
+                    "correct": correct_count,
+                    "is_passed": is_passed,
+                    "time_spent_seconds": submission.time_spent_seconds,
+                }
+            )
+
+            # 僅保留最新 10 筆測驗記錄
+            if len(user_prog.exam_history) > 10:
+                user_prog.exam_history = user_prog.exam_history[-10:]
+
         self.save_progress()
 
         if bank_id in self._metadata:

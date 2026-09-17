@@ -70,10 +70,22 @@ def test_exam_submission_and_scoring():
     assert result.score_percentage == 50.0
     assert result.is_passed is False
 
-    # 驗證 q2 被自動歸檔至錯題本
+    # 驗證全真模擬會寫入歷史記錄
     user_prog = exam_manager._progress.get("ai-103")
     assert user_prog is not None
     assert q2.id in user_prog.wrong_question_ids
+    history_count_before = len(user_prog.exam_history)
+
+    # 驗證練習模式不寫入歷史記錄
+    practice_sub = ExamSubmissionRequest(
+        mode="practice",
+        time_spent_seconds=10,
+        answers=[
+            UserAnswer(question_id=q1.id, selected_options=ans1_opts, selected_dropdowns=ans1_dds),
+        ],
+    )
+    exam_manager.submit_exam("ai-103", practice_sub)
+    assert len(user_prog.exam_history) == history_count_before
 
 
 def test_remove_wrong_question():

@@ -17,6 +17,8 @@
   let examSubmitted = false;
   let currentBankId = 'ai-103';
   let availableBanks = [];
+  let examStartTime = null;
+  let examTimerInterval = null;
 
   // DOM 快取
   let dom = {};
@@ -44,6 +46,7 @@
       questionGrid: document.getElementById('question-grid'),
       btnResetQuiz: document.getElementById('btn-reset-quiz'),
       progressText: document.getElementById('progress-text'),
+      examTimerDisplay: document.getElementById('exam-timer-display'),
       progressPercent: document.getElementById('progress-percent'),
       progressFill: document.getElementById('progress-fill'),
       qTopic: document.getElementById('q-topic'),
@@ -62,6 +65,31 @@
       expText: document.getElementById('exp-text'),
       backToHubBtn: document.getElementById('exam-back-to-hub-btn'),
     };
+  }
+
+  function startExamTimer() {
+    stopExamTimer();
+    examStartTime = Date.now();
+    if (dom.examTimerDisplay) {
+      dom.examTimerDisplay.style.display = 'inline-flex';
+      dom.examTimerDisplay.textContent = '⏱️ 00:00';
+    }
+    examTimerInterval = setInterval(() => {
+      if (!examStartTime) return;
+      const elapsed = Math.floor((Date.now() - examStartTime) / 1000);
+      const mins = String(Math.floor(elapsed / 60)).padStart(2, '0');
+      const secs = String(elapsed % 60).padStart(2, '0');
+      if (dom.examTimerDisplay) {
+        dom.examTimerDisplay.textContent = `⏱️ ${mins}:${secs}`;
+      }
+    }, 1000);
+  }
+
+  function stopExamTimer() {
+    if (examTimerInterval) {
+      clearInterval(examTimerInterval);
+      examTimerInterval = null;
+    }
   }
 
   function shuffle(array) {
@@ -215,6 +243,14 @@
     examSubmitted = false;
     userAnswers = {};
     userChecked = {};
+
+    if (mode === 'exam') {
+      startExamTimer();
+    } else {
+      stopExamTimer();
+      examStartTime = null;
+      if (dom.examTimerDisplay) dom.examTimerDisplay.style.display = 'none';
+    }
 
     applyFilterAndShuffle();
   }
@@ -624,6 +660,9 @@
       });
     });
 
+    const timeSpentSeconds = examStartTime ? Math.max(1, Math.round((Date.now() - examStartTime) / 1000)) : 0;
+    stopExamTimer();
+
     // 調用後端交卷 API
     try {
       await fetch(`/api/v1/exam/banks/${currentBankId}/submit`, {
@@ -631,7 +670,7 @@
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           mode: 'exam',
-          time_spent_seconds: 0,
+          time_spent_seconds: timeSpentSeconds,
           answers: answersList,
         }),
       });
@@ -649,8 +688,11 @@
     });
 
     const scorePct = Math.round((scoreCount / activeQuestions.length) * 100);
+    const mins = Math.floor(timeSpentSeconds / 60);
+    const secs = timeSpentSeconds % 60;
+    const timeSpentText = mins > 0 ? `${mins}分${secs}秒` : `${secs}秒`;
     alert(
-      `模擬考交卷完成！\n您的分數：${scorePct}分 (答對 ${scoreCount} 題 / 共 ${activeQuestions.length} 題)\n\n可點選題目導航面板檢視每題解析。`
+      `模擬考交卷完成！\n您的分數：${scorePct}分 (答對 ${scoreCount} 題 / 共 ${activeQuestions.length} 題)\n測驗花費時間：${timeSpentText}\n\n可點選題目導航面板檢視每題解析。`
     );
 
     renderCurrentQuestion();
@@ -731,6 +773,9 @@
       userAnswers = {};
       userChecked = {};
       examSubmitted = false;
+      if (currentMode === 'exam') {
+        startExamTimer();
+      }
       applyFilterAndShuffle();
     }
   }
