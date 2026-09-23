@@ -156,6 +156,7 @@
       if (e.target.tagName !== 'BUTTON') AppRouter.showSolarTide();
     });
 
+
     document.getElementById('nebula-back-to-hub-btn')?.addEventListener('click', () => AppRouter.showMainHub());
     document.getElementById('exam-back-to-hub-btn')?.addEventListener('click', () => AppRouter.showMainHub());
     document.getElementById('drop-back-to-hub-btn')?.addEventListener('click', () => AppRouter.showMainHub());

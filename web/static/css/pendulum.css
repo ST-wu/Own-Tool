@@ -1,0 +1,271 @@
+/* Chaos Pendulum Visualizer Style Sheet */
+:root {
+  --bg-dark: #0a0a14;
+  --accent-cyan: #00f0ff;
+  --accent-purple: #7000ff;
+  --panel-bg: rgba(15, 15, 25, 0.75);
+  --panel-border: rgba(255, 255, 255, 0.12);
+  --text-main: #f0f4f8;
+  --text-muted: #8a99a8;
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --transition-normal: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background-color: var(--bg-dark);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  color: var(--text-main);
+  user-select: none;
+}
+
+#canvas-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* 懸浮控制面板與頂部狀態 */
+.ui-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 10;
+  transition: opacity 0.5s ease;
+}
+
+.ui-overlay.idle {
+  opacity: 0;
+}
+
+/* 頂部微型狀態列 */
+.top-bar {
+  position: absolute;
+  top: 16px;
+  left: 20px;
+  right: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  pointer-events: auto;
+}
+
+.brand-badge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--panel-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--panel-border);
+  padding: 8px 14px;
+  border-radius: var(--radius-md);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.brand-icon {
+  font-size: 16px;
+  animation: spin 12s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.hud-stats {
+  display: flex;
+  gap: 8px;
+}
+
+.stat-chip {
+  background: var(--panel-bg);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--panel-border);
+  padding: 6px 12px;
+  border-radius: var(--radius-sm);
+  font-size: 12px;
+  font-family: monospace;
+  color: var(--accent-cyan);
+}
+
+/* 懸浮抽屜控制器 (底端置中或右側) */
+.control-dock {
+  position: absolute;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(92vw, 840px);
+  background: var(--panel-bg);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--panel-border);
+  border-radius: var(--radius-lg);
+  padding: 16px 20px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.45);
+  pointer-events: auto;
+  transition: var(--transition-normal);
+}
+
+.control-dock.collapsed {
+  transform: translateX(-50%) translateY(calc(100% + 30px));
+}
+
+.dock-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.dock-title {
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--text-muted);
+}
+
+.dock-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.btn-icon {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--panel-border);
+  color: var(--text-main);
+  padding: 6px 12px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: var(--transition-normal);
+}
+
+.btn-icon:hover {
+  background: rgba(0, 240, 255, 0.15);
+  border-color: var(--accent-cyan);
+  color: #fff;
+}
+
+.control-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 14px;
+}
+
+.control-item {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.control-label {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+.control-value {
+  color: var(--accent-cyan);
+  font-family: monospace;
+}
+
+/* 自訂滑桿 */
+input[type="range"] {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 4px;
+  border-radius: 2px;
+  background: rgba(255, 255, 255, 0.15);
+  outline: none;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--accent-cyan);
+  cursor: pointer;
+  box-shadow: 0 0 8px var(--accent-cyan);
+  transition: transform 0.1s ease;
+}
+
+input[type="range"]::-webkit-slider-thumb:hover {
+  transform: scale(1.2);
+}
+
+/* 下拉選單 */
+select.custom-select {
+  width: 100%;
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid var(--panel-border);
+  color: var(--text-main);
+  padding: 6px 10px;
+  border-radius: var(--radius-sm);
+  font-size: 12px;
+  outline: none;
+  cursor: pointer;
+}
+
+select.custom-select:focus {
+  border-color: var(--accent-cyan);
+}
+
+/* 喚醒按鈕 (收合時顯示於底部) */
+.dock-toggle-btn {
+  position: absolute;
+  bottom: 12px;
+  right: 20px;
+  background: var(--panel-bg);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--panel-border);
+  color: var(--text-main);
+  padding: 8px 14px;
+  border-radius: var(--radius-md);
+  font-size: 12px;
+  cursor: pointer;
+  pointer-events: auto;
+  transition: var(--transition-normal);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+.dock-toggle-btn:hover {
+  background: rgba(0, 240, 255, 0.2);
+  border-color: var(--accent-cyan);
+}

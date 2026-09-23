@@ -76,13 +76,16 @@ d:\Agent\Tools\Playwright/
 │   │   ├── models.py             # ClipItem, ClipboardMode, ClipboardConfig 模型
 │   │   ├── windows_clipboard.py  # Win32 user32/kernel32 剪貼簿與按鍵偵測
 │   │   └── manager.py            # SmartClipboardManager FIFO 佇列與正緣 Ctrl+V 監聽
-│   └── solar_tide/              # ☀️ 日潮星象儀 (天體太陽幾何、月相引潮力、海岸調和潮位與微氣候)
+│   ├── solar_tide/              # ☀️ 日潮星象儀 (天體太陽幾何、月相引潮力、海岸調和潮位與微氣候)
+│   │   ├── __init__.py
+│   │   ├── models.py             # SolarPosition, DayTimes, MoonPosition, TideStatus, WeatherInfo 模型
+│   │   ├── calculator.py         # NOAA 太陽演算法 + 月相 + 多重分潮調和物理疊加引擎
+│   │   ├── weather.py            # 即時微氣候服務 (Open-Meteo API、WMO 代碼解析與 10 分鐘快取)
+│   │   └── manager.py            # 港口/自訂座標管理與時空解算器
+│   └── chaos_pendulum/          # 🌀 混沌多連擺軌跡視覺系統 (失重拉格朗日多連擺運動、蝴蝶效應集群與離屏星軌光譜)
 │       ├── __init__.py
-│       ├── models.py             # SolarPosition, DayTimes, MoonPosition, TideStatus, WeatherInfo 模型
-│       ├── calculator.py         # NOAA 太陽演算法 + 月相 + 多重分潮調和物理疊加引擎
-│       ├── weather.py            # 即時微氣候服務 (Open-Meteo API、WMO 代碼解析與 10 分鐘快取)
-│       └── manager.py            # 港口/自訂座標管理與時空解算器
-
+│       ├── models.py             # ColorTheme, PendulumPreset 動態配置資料模型
+│       └── presets.py            # 五大內建動力學預設場景與五套光譜視覺主題
 │
 ├── api/                          # 🌐 HTTP REST API 服務介面
 │   ├── __init__.py
@@ -92,19 +95,23 @@ d:\Agent\Tools\Playwright/
 │   ├── lan_drop_routes.py        # 區網轉檔路由 (/api/v1/drop/status, /pair, /upload, /url/send, /ws)
 │   ├── clipboard_routes.py       # 智慧剪貼簿路由 (/api/v1/clipboard/state, /toggle, /clear, /ws)
 │   ├── solar_tide_routes.py      # 日潮星象儀路由 (/api/solartide/locations, /calculate)
+│   ├── pendulum_routes.py        # 混沌多連擺視覺系統路由 (/pendulum, /api/v1/pendulum/themes, /presets)
 │   └── schemas.py                # 請求與響應 Pydantic 資料結構定義
 │
 ├── web/                          # 🖥️ Web 控制台、星雲視覺化與測驗前端
 │   ├── index.html                # 整合型工具中心單頁儀表板 (SPA)
 │   ├── drop_mobile.html          # 📱 手機端專屬極簡響應式直傳介面
+│   ├── pendulum.html             # 🌀 混沌多連擺獨立全螢幕動態視覺舞台
 │   └── static/                   # 靜態資源目錄
 │       ├── css/style.css         # 現代深色玻璃擬態樣式表
+│       ├── css/pendulum.css      # 混沌多連擺專屬暗黑流光樣式表
 │       ├── js/app.js             # 主控制台與工作區路由邏輯
 │       ├── js/nebula.js          # D3.js 力導向星雲圖渲染與代碼自省
 │       ├── js/exam.js            # 模擬測驗作答互動、計時與成績單引擎
 │       ├── js/lan_drop.js        # 區網快速轉檔電腦端互動邏輯
 │       ├── js/clipboard.js       # 智慧剪貼簿前端狀態渲染與 WebSocket 同步
 │       ├── js/solar_tide.js      # 日潮星象儀前端 Canvas 穹頂、正弦波與時間旅行引擎
+│       ├── js/pendulum.js        # 混沌多連擺物理積分、群集散亂度與雙層離屏渲染引擎
 │       └── vendor/d3.min.js      # 輕量 D3.js v7 圖形物理庫
 │
 ├── tests/                        # 🧪 自動化測試套件 (持續整合品質保證)
@@ -119,7 +126,8 @@ d:\Agent\Tools\Playwright/
 │   ├── test_exam_simulator.py    # 模擬測驗題庫動態掃描與評分測試
 │   ├── test_lan_drop.py          # 區網快速轉檔安全性、傳輸與配對測試
 │   ├── test_smart_clipboard.py   # 剪貼簿管家 FIFO、正緣步進、防爆上限與原子銷毀測試
-│   └── test_solar_tide.py        # 日潮星象儀天文幾何、月相引潮力與調和潮位測試
+│   ├── test_solar_tide.py        # 日潮星象儀天文幾何、月相引潮力與調和潮位測試
+│   └── test_chaos_pendulum.py    # 混沌多連擺主題邊界、拉格朗日模型與端點測試
 │
 ├── logs/                         # 📝 系統與模組日誌集中目錄
 │   ├── operations/               # 🎯 專案操作總紀錄

@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>混沌多連擺動態軌跡視覺系統 | Chaos Pendulum Visualizer</title>
+  <link rel="stylesheet" href="/static/css/pendulum.css">
+</head>
+<body>
+  <!-- Canvas 物理繪圖舞台 -->
+  <div id="canvas-container">
+    <canvas id="main-canvas"></canvas>
+  </div>
+
+  <!-- 懸浮沉浸式 UI (閒置 3 秒自動隱形) -->
+  <div class="ui-overlay">
+    <!-- 頂部狀態 HUD -->
+    <header class="top-bar">
+      <div class="brand-badge">
+        <span class="brand-icon">🌀</span>
+        <span>CHAOS PENDULUM</span>
+      </div>
+
+      <div class="hud-stats">
+        <span class="stat-chip" id="hud-links">2 連擺</span>
+        <span class="stat-chip" id="hud-fps">60 FPS</span>
+        <a href="/" class="btn-icon" style="text-decoration: none;" title="返回工具總覽主頁">
+          🏠 主控台
+        </a>
+      </div>
+    </header>
+
+    <!-- 底部控制抽屜 (可收合) -->
+    <aside class="control-dock" id="control-dock">
+      <div class="dock-header">
+        <span class="dock-title">物理動力學與光譜調控</span>
+        <div class="dock-actions">
+          <button class="btn-icon" id="btn-pause">⏸ 暫停</button>
+          <button class="btn-icon" id="btn-reset">🔄 重設狀態</button>
+          <button class="btn-icon" id="btn-fullscreen">⛶ 全螢幕 (F)</button>
+        </div>
+      </div>
+
+      <div class="control-grid">
+        <!-- 預設場景模式 -->
+        <div class="control-item">
+          <label class="control-label" for="sel-preset">
+            <span>預設動力場景</span>
+          </label>
+          <select id="sel-preset" class="custom-select">
+            <option value="classic_double">經典雙擺 (Double)</option>
+            <option value="triple_chaos">三階狂亂 (Triple)</option>
+            <option value="butterfly_swarm">蝴蝶效應群集 (30x)</option>
+            <option value="cosmic_slow">深空慢舞 (Cosmic Slow)</option>
+            <option value="quad_whip">四節柔鞭 (Quadruple)</option>
+          </select>
+        </div>
+
+        <!-- 光譜視覺主題 -->
+        <div class="control-item">
+          <label class="control-label" for="sel-theme">
+            <span>光譜視覺主題</span>
+          </label>
+          <select id="sel-theme" class="custom-select">
+            <option value="cyber_aurora">🌌 賽博極光 (Cyber Aurora)</option>
+            <option value="solar_amber">🍂 日光琥珀 (Solar Amber)</option>
+            <option value="monochrome_ink">🖤 玄黑水墨 (Monochrome Ink)</option>
+            <option value="abyssal_bio">🌊 深海幽光 (Abyssal Bio)</option>
+            <option value="doppler_prism">🌈 多普勒光譜 (Doppler Prism)</option>
+          </select>
+        </div>
+
+        <!-- 擺節數調節 -->
+        <div class="control-item">
+          <div class="control-label">
+            <span>相連擺數 (Links)</span>
+            <span class="control-value" id="val-links">2</span>
+          </div>
+          <input type="range" id="sl-links" min="2" max="6" step="1" value="2">
+        </div>
+
+        <!-- 蝴蝶效應群集數量 -->
+        <div class="control-item">
+          <div class="control-label">
+            <span>群集數量 (Swarm)</span>
+            <span class="control-value" id="val-swarm">1 條</span>
+          </div>
+          <input type="range" id="sl-swarm" min="1" max="30" step="1" value="1">
+        </div>
+
+        <!-- 運動速度調節 -->
+        <div class="control-item">
+          <div class="control-label">
+            <span>運動速度 (Speed)</span>
+            <span class="control-value" id="val-speed">1.0x</span>
+          </div>
+          <input type="range" id="sl-speed" min="0.1" max="3.0" step="0.1" value="1.0">
+        </div>
+
+        <!-- 殘影留存度 -->
+        <div class="control-item">
+          <div class="control-label">
+            <span>光軌留存 (Persistence)</span>
+            <span class="control-value" id="val-trail">0.965</span>
+          </div>
+          <input type="range" id="sl-trail" min="0.800" max="0.995" step="0.005" value="0.965">
+        </div>
+      </div>
+    </aside>
+
+    <!-- 收合/展開控制台按鈕 -->
+    <button class="dock-toggle-btn" id="dock-toggle">收合面板</button>
+  </div>
+
+  <script src="/static/js/pendulum.js"></script>
+</body>
+</html>

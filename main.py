@@ -54,7 +54,6 @@ async def lifespan(app: FastAPI):
     # 優雅停機流程 (Graceful Shutdown)
     logger.info("=== 正在停止 Playwright 常駐服務 ===")
     op_logger.log(action="SYSTEM:SHUTDOWN", status="INFO", details={"event": "graceful_shutdown"})
-    op_logger.shutdown()
     await scheduler.stop()
     await browser_manager.stop()
     logger.info("Playwright 常駐服務已安全關閉")
@@ -73,12 +72,14 @@ from api.exam_routes import exam_router
 from api.lan_drop_routes import router as lan_drop_router
 from api.clipboard_routes import clipboard_router
 from api.solar_tide_routes import solar_tide_router
+from api.pendulum_routes import pendulum_router
 app.include_router(router)
 app.include_router(nebula_router)
 app.include_router(exam_router)
 app.include_router(lan_drop_router)
 app.include_router(clipboard_router)
 app.include_router(solar_tide_router)
+app.include_router(pendulum_router)
 
 # 掛載靜態資源與產出物預覽
 from pathlib import Path

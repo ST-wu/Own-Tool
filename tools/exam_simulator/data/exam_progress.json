@@ -1,74 +1,13 @@
 {
   "ai-103": {
     "bank_id": "ai-103",
-    "wrong_question_ids": [],
+    "wrong_question_ids": [
+      2
+    ],
     "mastered_question_ids": [
       9999
     ],
     "exam_history": [
-      {
-        "timestamp": "2026-09-16 17:45:10",
-        "mode": "exam",
-        "score_pct": 50.0,
-        "total": 2,
-        "correct": 1,
-        "is_passed": false,
-        "time_spent_seconds": 60
-      },
-      {
-        "timestamp": "2026-09-17 09:00:26",
-        "mode": "exam",
-        "score_pct": 50.0,
-        "total": 2,
-        "correct": 1,
-        "is_passed": false,
-        "time_spent_seconds": 60
-      },
-      {
-        "timestamp": "2026-09-17 09:02:51",
-        "mode": "exam",
-        "score_pct": 50.0,
-        "total": 2,
-        "correct": 1,
-        "is_passed": false,
-        "time_spent_seconds": 60
-      },
-      {
-        "timestamp": "2026-09-17 09:10:41",
-        "mode": "exam",
-        "score_pct": 50.0,
-        "total": 2,
-        "correct": 1,
-        "is_passed": false,
-        "time_spent_seconds": 60
-      },
-      {
-        "timestamp": "2026-09-17 09:22:07",
-        "mode": "exam",
-        "score_pct": 0.0,
-        "total": 1,
-        "correct": 0,
-        "is_passed": false,
-        "time_spent_seconds": 45
-      },
-      {
-        "timestamp": "2026-09-17 09:28:09",
-        "mode": "exam",
-        "score_pct": 100.0,
-        "total": 10,
-        "correct": 10,
-        "is_passed": true,
-        "time_spent_seconds": 180
-      },
-      {
-        "timestamp": "2026-09-17 09:39:54",
-        "mode": "exam",
-        "score_pct": 50.0,
-        "total": 2,
-        "correct": 1,
-        "is_passed": false,
-        "time_spent_seconds": 60
-      },
       {
         "timestamp": "2026-09-17 09:44:35",
         "mode": "exam",
@@ -86,6 +25,78 @@
         "correct": 10,
         "is_passed": true,
         "time_spent_seconds": 43
+      },
+      {
+        "timestamp": "2026-09-18 17:06:30",
+        "mode": "exam",
+        "score_pct": 50.0,
+        "total": 2,
+        "correct": 1,
+        "is_passed": false,
+        "time_spent_seconds": 60
+      },
+      {
+        "timestamp": "2026-09-21 09:12:14",
+        "mode": "exam",
+        "score_pct": 50.0,
+        "total": 2,
+        "correct": 1,
+        "is_passed": false,
+        "time_spent_seconds": 60
+      },
+      {
+        "timestamp": "2026-09-21 09:24:59",
+        "mode": "exam",
+        "score_pct": 50.0,
+        "total": 2,
+        "correct": 1,
+        "is_passed": false,
+        "time_spent_seconds": 60
+      },
+      {
+        "timestamp": "2026-09-21 10:05:55",
+        "mode": "exam",
+        "score_pct": 50.0,
+        "total": 2,
+        "correct": 1,
+        "is_passed": false,
+        "time_spent_seconds": 60
+      },
+      {
+        "timestamp": "2026-09-23 14:10:05",
+        "mode": "exam",
+        "score_pct": 50.0,
+        "total": 2,
+        "correct": 1,
+        "is_passed": false,
+        "time_spent_seconds": 60
+      },
+      {
+        "timestamp": "2026-09-23 15:48:45",
+        "mode": "exam",
+        "score_pct": 50.0,
+        "total": 2,
+        "correct": 1,
+        "is_passed": false,
+        "time_spent_seconds": 60
+      },
+      {
+        "timestamp": "2026-09-23 15:51:52",
+        "mode": "exam",
+        "score_pct": 50.0,
+        "total": 2,
+        "correct": 1,
+        "is_passed": false,
+        "time_spent_seconds": 60
+      },
+      {
+        "timestamp": "2026-09-23 16:02:58",
+        "mode": "exam",
+        "score_pct": 50.0,
+        "total": 2,
+        "correct": 1,
+        "is_passed": false,
+        "time_spent_seconds": 60
       }
     ]
   }
